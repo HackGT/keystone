@@ -5,6 +5,7 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const compression = require('compression');
 const path = require('path');
 const fs = require('fs');
+const { URLSearchParams } = require('url');
 const fallback = require('express-history-api-fallback');
 
 const getWebpackConfig = require('./server/getWebpackConfig');
@@ -26,8 +27,8 @@ class AdminUIApp {
       throw new Error("Admin path cannot be the root path. Try; '/admin'");
     }
 
-    if (authStrategy && authStrategy.authType !== 'password') {
-      throw new Error('Keystone 5 Admin currently only supports the `PasswordAuthStrategy`');
+    if (authStrategy && authStrategy.authType !== 'password' && !authStrategy.loginPath) {
+      throw new Error('Keystone 5 Admin does not support the given auth strategy');
     }
 
     this.adminPath = adminPath;
@@ -45,6 +46,7 @@ class AdminUIApp {
       signinPath: `${this.adminPath}/signin`,
       signoutPath: `${this.adminPath}/signout`,
     };
+    this.publicPaths = [this.routes.signinPath, this.routes.signoutPath];
   }
 
   getAdminMeta() {
@@ -71,22 +73,6 @@ class AdminUIApp {
       req.user &&
       this._isAccessAllowed({ authentication: { item: req.user, listKey: req.authedListKey } })
     );
-  }
-
-  createSessionMiddleware() {
-    const { signinPath } = this.routes;
-
-    const app = express();
-
-    // Short-circuit GET requests when the user already signed in (avoids
-    // downloading UI bundle, doing a client side redirect, etc)
-    app.get(signinPath, (req, res, next) =>
-      this.isAccessAllowed(req) ? res.redirect(this.adminPath) : next()
-    );
-
-    // TODO: Attach a server-side signout to signoutPath
-
-    return app;
   }
 
   build({ keystone, distDir }) {
@@ -149,6 +135,20 @@ class AdminUIApp {
     const { adminPath } = this;
     const app = express.Router();
 
+    app.use(this.routes.signinPath, (req, res, next) => {
+      if (this.isAccessAllowed(req)) {
+        return res.redirect(req.query.redirect || this.adminPath);
+      }
+      if (req.user) {
+        return res.redirect(req.query.redirect || '/');
+      }
+      if (this.authStrategy && this.authStrategy.loginPath) {
+        const query = req.url.split('?')[1] || '';
+        return res.redirect(`${this.authStrategy.loginPath}?${query}`);
+      }
+      next();
+    });
+
     app.use(adminPath, (req, res, next) => {
       // Depending on what was requested, we might redirect the user based on
       // their access
@@ -170,10 +170,13 @@ class AdminUIApp {
           if (extension) res.type(extension);
           next();
         },
-        // For page loads, we want to redirect back to signin page
+        // For private pages, we want to redirect unauthenticated users back to signin page
         'text/html': () => {
-          if (req.originalUrl !== this.routes.signinPath && !this.isAccessAllowed(req)) {
-            return res.redirect(this.routes.signinPath);
+          const isPublicUrl = this.publicPaths.includes(`${adminPath}${req.path}`);
+          if (!isPublicUrl && !this.isAccessAllowed(req) && !req.user) {
+            return res.redirect(
+              `${this.routes.signinPath}?${new URLSearchParams({ redirect: req.originalUrl })}`
+            );
           }
           next();
         },
@@ -201,7 +204,6 @@ class AdminUIApp {
     }
 
     if (this.authStrategy) {
-      app.use(this.createSessionMiddleware());
       for (const pair of middlewarePairs) {
         app.use(mountPath, (req, res, next) => {
           return this.isAccessAllowed(req)

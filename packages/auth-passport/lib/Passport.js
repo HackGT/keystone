@@ -59,6 +59,10 @@ class PassportAuthStrategy {
       ['function', 'undefined'].includes(typeof config.callbackPathMiddleware),
       'When `config.callbackPathMiddleware` is passed, it must be an express middleware function.'
     );
+    assert(
+      ['function', 'undefined'].includes(typeof config.resolveState),
+      'When `config.resolveState` is passed, it must be a function.'
+    );
 
     // NOTE: Remove after March 1st, 2020 (ie; 6mo since deprecation)
     if (typeof config.hostURL !== 'undefined') {
@@ -75,6 +79,7 @@ class PassportAuthStrategy {
     }
 
     this.authType = authType;
+    this.loginPath = config.loginPath;
 
     // Capture some useful variables
     this._keystone = keystone;
@@ -85,7 +90,6 @@ class PassportAuthStrategy {
     // Pull all the required data off the `config` object
     this._serviceAppId = config.appId;
     this._serviceAppSecret = config.appSecret;
-    this._loginPath = config.loginPath;
     this._loginPathMiddleware = config.loginPathMiddleware || ((req, res, next) => next());
     this._callbackPath = config.callbackPath;
     this._callbackPathMiddleware = config.callbackPathMiddleware || ((req, res, next) => next());
@@ -97,6 +101,7 @@ class PassportAuthStrategy {
       (error => {
         throw error;
       });
+    this._resolveState = config.resolveState || (() => '');
 
     // The field name on the User list (for example) such as `facebookUserId` or
     // `twitterUserId` which the application developer has set.
@@ -110,6 +115,11 @@ class PassportAuthStrategy {
 
     // Tell passport.js about the strategy we setup
     passport.use(this._passportStrategy);
+  }
+
+  getAdminMeta() {
+    const listKey = this._listKey;
+    return { listKey };
   }
 
   getInputFragment() {
@@ -128,12 +138,13 @@ class PassportAuthStrategy {
     }
     isInitialized = true;
 
-    app.get(this._loginPath, this._loginPathMiddleware, (req, res, next) => {
+    app.get(this.loginPath, this._loginPathMiddleware, (req, res, next) => {
       // If the user isn't already logged in
       // kick off the service auth process
       passport.authenticate(this.authType, {
         session: false,
         scope: this._passportScope,
+        state: this._resolveState(req, res),
       })(req, res, next);
     });
 
