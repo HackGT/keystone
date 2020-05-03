@@ -1,3 +1,29 @@
+## Intro to Keystone
+
+Keystone is a open source headless CMS platform built with NodeJS. It provides many features out of the box such as an Admin UI, GraphQL support, and 3rd party OAuth. We chose to work with Keystone as it has many of the requirements we are looking for with great documentation. However, since some of the features we needed are not currently in the main package, but exist as pull requests, we decided to create our own fork of the Keystone repo to implement breaking changes as we wish.
+
+Keystone uses Yarn as it's package manager. Although it is similar to npm, there are a few differences, so take a look at the usage guide [here](https://classic.yarnpkg.com/en/docs/usage). You can find Keystone demo projects under `demo-projects`, test projects under `test-projects`, and our projects in development under `projects`.
+
+The Keystone repo is classified as a "monorepo", meaning it contains multiple connected projects. As such, all the dependencies for each subproject are installed under the root `node_modules` folder, and the dependencies for each subproject are symlinked to this folder. Thus, you will find that the individual `node_modules` folders under each project will not contain any dependencies.
+
+## Running the Project
+
+The development is done from the `master` branch.
+
+1. Run `yarn` to install the dependencies for the monorepo
+2. Ensure the MongoDB server is running (typically started by running `mongod`)
+3. Change directory to `projects/cms`
+4. Run `yarn dev` to start development
+
+To build for production, run `yarn build` instead.
+
+If you mess up any installation, run `yarn fresh` to clean the project and reinstall dependencies.
+
+## List of Merged Branches
+
+- Branch [`admin-ui-login-improvements`](https://github.com/zenflow/keystone/tree/admin-ui-login-improvements) by zenflow
+	- Used to implement 3rd party auth with passport for Ground Truth
+
 <div align="center">
   <img src="website/static/readme-header.png" width="557">
   <h1>KeystoneJS</h1>
