@@ -48,6 +48,8 @@ const Form = styled.form({
 
 const getValues = (fieldsObject, item) => mapKeys(fieldsObject, field => field.serialize(item));
 
+const checkIsReadOnly = ({ maybeAccess, config }) => !maybeAccess.update || !!config.isReadOnly;
+
 // Memoizing allows us to reduce the calls to `.serialize` when data hasn't
 // changed.
 const getInitialValues = memoizeOne(getValues);
@@ -56,9 +58,7 @@ const getCurrentValues = memoizeOne(getValues);
 const deserializeItem = memoizeOne((list, data) => list.deserializeItemData(data));
 
 const getRenderableFields = memoizeOne(list =>
-  list.fields
-    .filter(({ isPrimaryKey }) => !isPrimaryKey)
-    .filter(({ maybeAccess, config }) => !!maybeAccess.update || !!config.isReadOnly)
+  list.fields.filter(({ isPrimaryKey }) => !isPrimaryKey)
 );
 
 const ItemDetails = ({
@@ -253,6 +253,7 @@ const ItemDetails = ({
             <Render key={field.path}>
               {() => {
                 const [Field] = field.adminMeta.readViews([field.views.Field]);
+                const isReadOnly = checkIsReadOnly(field);
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 const onChange = useCallback(
                   value => {
@@ -283,6 +284,7 @@ const ItemDetails = ({
                       field={field}
                       list={list}
                       item={item}
+                      isReadOnly={isReadOnly}
                       errors={[
                         ...(itemErrors[field.path] ? [itemErrors[field.path]] : []),
                         ...(validationErrors[field.path] || []),
@@ -306,6 +308,7 @@ const ItemDetails = ({
                     validationWarnings[field.path],
                     initialData[field.path],
                     onChange,
+                    isReadOnly,
                   ]
                 );
               }}
