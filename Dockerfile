@@ -1,14 +1,12 @@
 FROM node:10-alpine
 
-RUN mkdir -p /usr/src/keystone
+# Templating from registration repo
+# RUN apk update && apk add bash git
+
 WORKDIR /usr/src/keystone
 COPY . /usr/src/keystone
 RUN yarn
-
-FROM node:10-alpine
-WORKDIR /usr/src/keystone/projects/cms
-COPY . /usr/src/keystone/projects/cms
-RUN yarn build
+RUN cd /user/src/keystone/projects/cms; yarn build
 
 EXPOSE 3000
-CMD ["yarn", "start"]
+CMD cd /user/src/keystone/projects/cms; yarn start
