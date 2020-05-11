@@ -129,8 +129,6 @@ const readAdminAccess = {
   delete: ACCESS_ADMIN
 }
 
-console.log("readAdmin: ", readAdminAccess)
-
 exports.Hackathon = {
   access: {
     create: ACCESS_ADMIN,
@@ -143,7 +141,6 @@ exports.Hackathon = {
     delete: ACCESS_ADMIN
   },
   fields: {
-
     name: {
       type: Text
     },
