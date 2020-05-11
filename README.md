@@ -1,4 +1,4 @@
-## Intro to Keystone
+## Intro to HackGT Keystone
 
 Keystone is a open source headless CMS platform built with NodeJS. It provides many features out of the box such as an Admin UI, GraphQL support, and 3rd party OAuth. We chose to work with Keystone as it has many of the requirements we are looking for with great documentation. However, since some of the features we needed are not currently in the main package, but exist as pull requests, we decided to create our own fork of the Keystone repo to implement breaking changes as we wish.
 
