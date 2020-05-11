@@ -37,7 +37,16 @@ keystone.createList('User', {
 
 #### `format`
 
+<<<<<<< HEAD
 Defines the format of string that the component will display, such as `Do MMMM YYYY`. Values will be stored in the database in ISO8601 (`YYYY-MM-DD`) format.
+=======
+Defines the format of date string that the will be displayed in the Admin UI.
+The Admin UI uses the [`date-fns` v2.x](https://date-fns.org/v2.13.0/docs/format) library for formatting, and any format supported by that library is valid. E.g.
+
+- `yyyy-MM-dd` => "1970-01-31"
+- `MM/dd/yyyy` => "01/31/1970"
+- `MMM do, yy` => "Jan 31st, 70"
+>>>>>>> e9a0de2cc... Upgrade to date-fns 2.x (#2927)
 
 #### `yearRangeFrom`
 
