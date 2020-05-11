@@ -3,7 +3,7 @@ FROM node:10-alpine
 RUN mkdir -p /usr/src/keystone
 WORKDIR /usr/src/keystone
 COPY . /usr/src/keystone
-RUN npm install --unsafe-perm
+RUN yarn
 
 FROM node:10-alpine
 WORKDIR /usr/src/keystone/projects/cms
