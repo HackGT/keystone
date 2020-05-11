@@ -23,6 +23,15 @@ const IS_ADMIN_OR_FILTER = (user, filter) => {
   return filter;
 };
 
+const readAdminAccess = {
+  create: ACCESS_ADMIN,
+  read: ACCESS_GENERAL,
+  update: ACCESS_ADMIN,
+  delete: ACCESS_ADMIN
+}
+
+console.log("readAdmin: ",readAdminAccess)
+
 exports.Hackathon = {
   access: {
     create: ACCESS_ADMIN,
@@ -32,9 +41,10 @@ exports.Hackathon = {
       })
     },
     update: ACCESS_ADMIN,
-    delete: ACCESS_ADMIN,
+    delete: ACCESS_ADMIN
   },
   fields: {
+
     name: {
       type: Text
     },
@@ -103,22 +113,25 @@ exports.Location = {
   fields: {
     name: {
       type: Text,
-      isRequired: true
+      isRequired: true,
+      isReadOnly: !ACCESS_ADMIN
     },
     capacity: {
-      type: Integer
+      type: Integer,
+      isReadOnly: !ACCESS_ADMIN
     }
   }
 }
 
 exports.Type = {
-  access: ACCESS_GENERAL,
+  access: readAdminAccess,
   fields: {
     name: {
       type: Text,
-      isRequired: true
+      isRequired: true,
+      access: readAdminAccess
     }
-  },
+  }
 }
 
 exports.FAQ = {
@@ -165,14 +178,17 @@ exports.User = {
   },
   fields: {
     name: {
-      type: Text
+      type: Text,
+      access: readAdminAccess
     },
     email: {
       type: Text,
+      access: readAdminAccess
     },
     groundTruthId: {
       type: Text,
-      label: 'Ground truth ID'
+      label: 'Ground truth ID',
+      access: readAdminAccess
     },
     permissionLevel: {
       type: Select,
@@ -182,6 +198,6 @@ exports.User = {
         { value: 'GENERAL', label: 'General - Can read/write only essentials' }
       ],
       access: ACCESS_ADMIN
-    }
+    },
   }
 }
