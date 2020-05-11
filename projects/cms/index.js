@@ -7,6 +7,7 @@ const { Hackathon, Event, Location, Type, FAQ, Block, User } = require('./schema
 const GroundTruthAuthStrategy = require('./auth/GroundTruthAuthStrategy');
 
 require('dotenv').config();
+const adminUsers = require('./adminUsers')
 
 const keystone = new Keystone({
   name: 'HackGT CMS',
@@ -19,10 +20,11 @@ const keystone = new Keystone({
 keystone.createList('Hackathon', Hackathon);
 keystone.createList('Event', Event);
 keystone.createList('Location', Location);
-keystone.createList('Type', Type);
 keystone.createList('FAQ', FAQ);
 keystone.createList('Block', Block);
+keystone.createList('Type', Type);
 keystone.createList('User', User);
+
 
 const groundTruthStrategy = keystone.createAuthStrategy({
   type: GroundTruthAuthStrategy,
@@ -33,7 +35,13 @@ const groundTruthStrategy = keystone.createAuthStrategy({
     appSecret: process.env.GROUND_TRUTH_CLIENT_SECRET,
     loginPath: '/auth/ground',
     callbackPath: '/auth/ground/callback',
-    onAuthenticated: ({ }, req, res) => {
+    onAuthenticated: (data, req, res) => {
+      console.log("auth")
+      console.log(data)
+
+      //
+      // console.log(req)
+      // console.log(res)
       res.redirect('/admin');
     },
 
@@ -42,6 +50,7 @@ const groundTruthStrategy = keystone.createAuthStrategy({
     },
 
     resolveCreateData: ({ createData, serviceProfile }, req, res) => {
+      console.log("resolved")
       if (!serviceProfile.name || !serviceProfile.email) {
         res.redirect('/error');
       }
@@ -53,7 +62,7 @@ const groundTruthStrategy = keystone.createAuthStrategy({
     }
   }
 })
-
+console.log("hello")
 const graphQLApp = new GraphQLApp({})
 
 const adminApp = new AdminUIApp({
