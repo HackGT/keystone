@@ -11,11 +11,10 @@ const {
 const { Markdown } = require('@keystonejs/fields-markdown');
 
 const ACCESS_GENERAL = ({ authentication: { item: user } }) => Boolean(user);
-const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel == 'TECH_TEAM');
+const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && (user.permissionLevel == 'TECH_TEAM' || user.permissionLevel == 'GENERAL'));
 const ACCESS_ADMIN = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel == 'ADMIN');
 
 const IS_ADMIN_OR_FILTER = (user, filter) => {
-
   if (Boolean(user && user.permissionLevel == 'ADMIN')) {
     return {};
   }
@@ -140,9 +139,11 @@ exports.Hackathon = {
     update: ACCESS_ADMIN,
     delete: ACCESS_ADMIN
   },
+  adminDoc: 'All hackathons and their status',
   fields: {
     name: {
-      type: Text
+      type: Text,
+      isRequired: true
     },
     events: {
       type: Relationship,
@@ -152,7 +153,10 @@ exports.Hackathon = {
     isActive: {
       type: Checkbox
     }
-  }
+  },
+  adminConfig: {
+    defaultColumns: 'name, isActive'
+  },
 }
 
 exports.Event = {
@@ -168,6 +172,7 @@ exports.Event = {
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL,
   },
+  adminDoc: 'Schedule of events for current hackathon',
   fields: {
     name: {
       type: Text,
@@ -187,7 +192,8 @@ exports.Event = {
       type: Select,
       dataType: 'string',
       options: TIMES,
-      isRequired: true
+      isRequired: true,
+      adminDoc: 'Please search for the time'
     },
     startDate: {
       type: DateTime,
@@ -201,7 +207,8 @@ exports.Event = {
       type: Select,
       dataType: 'string',
       options: TIMES,
-      isRequired: true
+      isRequired: true,
+      adminDoc: 'Please search for the time'
     },
     endDate: {
       type: DateTime,
@@ -227,13 +234,15 @@ exports.Event = {
   hooks: {
     // Existing Item is the whole event data, while resolved data only holds the changed data
     resolveInput: ({ existingItem, resolvedData }) => {
-      const startDay = resolvedData.startDay || existingItem.startDay;
-      const startTime = resolvedData.startTime || existingItem.startTime;
-      const endDay = resolvedData.endDay || existingItem.endDay;
-      const endTime = resolvedData.endTime || existingItem.endTime;
+      const startDay = resolvedData.startDay || (existingItem ? existingItem.startDay : null);
+      const startTime = resolvedData.startTime || (existingItem ? existingItem.startTime : null);
+      const endDay = resolvedData.endDay || (existingItem ? existingItem.endDay : null);
+      const endTime = resolvedData.endTime || (existingItem ? existingItem.endTime : null);
 
-      resolvedData.startDate = new Date(`${startDay} ${startTime} UTC`).toISOString();
-      resolvedData.endDate = new Date(`${endDay} ${endTime} UTC`).toISOString();
+      if (startDay && startTime && endDay && endTime) {
+        resolvedData.startDate = new Date(`${startDay} ${startTime} UTC`).toISOString();
+        resolvedData.endDate = new Date(`${endDay} ${endTime} UTC`).toISOString();
+      }
 
       return resolvedData;
     }
@@ -241,7 +250,13 @@ exports.Event = {
 }
 
 exports.Location = {
-  access: ACCESS_GENERAL,
+  access: {
+    create: ACCESS_GENERAL,
+    read: true,
+    update: ACCESS_GENERAL,
+    delete: ACCESS_GENERAL
+  },
+  adminDoc: 'Possible locations for events',
   fields: {
     name: {
       type: Text,
@@ -256,43 +271,73 @@ exports.Location = {
 }
 
 exports.Type = {
-  access: readAdminAccess,
+  access: {
+    create: ACCESS_ADMIN,
+    read: true,
+    update: ACCESS_ADMIN,
+    delete: ACCESS_ADMIN
+  },
+  adminDoc: 'Types of hackathon events',
   fields: {
     name: {
       type: Text,
-      isRequired: true,
-      access: readAdminAccess
+      isRequired: true
     }
   }
 }
 
 exports.FAQ = {
-  access: ACCESS_GENERAL,
+  access: {
+    create: ACCESS_GENERAL,
+    read: true,
+    update: ACCESS_GENERAL,
+    delete: ACCESS_GENERAL
+  },
+  adminDoc: 'Questions and answers for website and mobile app',
   fields: {
     question: {
       type: Text,
-      isMultiline: true
+      isMultiline: true,
+      isRequired: true
     },
     answer: {
       type: Text,
-      isMultiline: true
+      isMultiline: true,
+      isRequired: true
     }
   },
   plural: 'FAQs'
 }
 
 exports.Block = {
-  access: ACCESS_GENERAL,
+  access: {
+    create: ACCESS_GENERAL,
+    read: true,
+    update: ACCESS_GENERAL,
+    delete: ACCESS_GENERAL
+  },
+  adminDoc: 'Content blocks for website and mobile app',
   fields: {
     name: {
-      type: Text
+      type: Text,
+      isRequired: true
     },
     slug: {
-      type: Text
+      type: Text,
+      isRequired: true
     },
     content: {
-      type: Markdown
-    }
+      type: Markdown,
+      isRequired: true
+    },
+    usage: {
+      type: Select,
+      options: [
+        { value: 'MOBILE', label: 'Mobile app' },
+        { value: 'WEB', label: 'Website' },
+        { value: 'OTHER', label: 'Other' }
+      ],
+    },
   }
 }
 
@@ -308,14 +353,17 @@ exports.User = {
     update: ACCESS_ADMIN,
     delete: ACCESS_ADMIN
   },
+  adminDoc: 'Users with access to the Admin UI',
   fields: {
     name: {
       type: Text,
-      access: readAdminAccess
+      access: readAdminAccess,
+      isRequired: true
     },
     email: {
       type: Text,
-      access: readAdminAccess
+      access: readAdminAccess,
+      isRequired: true
     },
     groundTruthId: {
       type: Text,
