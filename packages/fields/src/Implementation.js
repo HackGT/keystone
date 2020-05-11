@@ -175,7 +175,6 @@ class Field {
     return [];
   }
   getAdminMeta({ schemaName }) {
-    console.log("schemaName", schemaName)
     const schemaAccess = this.access[schemaName];
     return this.extendAdminMeta({
       label: this.label,
