@@ -1,16 +1,15 @@
 FROM node:10-alpine
 
-# Templating from registration repo
-RUN apk update && apk add bash git
-
+RUN mkdir -p /usr/src/keystone
 WORKDIR /usr/src/keystone
 COPY . /usr/src/keystone
-RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python && \
-  npm config set unsafe-perm true && \
-  npm install --quiet node-gyp -g && \
-  yarn && \
-  apk del native-deps
-RUN cd /user/src/keystone/projects/cms; yarn build
+RUN npm install --unsafe-perm && \
+  yarn
+
+FROM node:10-alpine
+WORKDIR /usr/src/keystone/projects/cms
+COPY . /usr/src/keystone/projects/cms
+RUN yarn build
 
 EXPOSE 3000
-CMD cd /user/src/keystone/projects/cms; yarn start
+CMD ["yarn", "start"]
