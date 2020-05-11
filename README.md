@@ -21,8 +21,10 @@ If you mess up any installation, run `yarn fresh` to clean the project and reins
 
 ## List of Merged Branches
 
-- Branch [`admin-ui-login-improvements`](https://github.com/zenflow/keystone/tree/admin-ui-login-improvements) by zenflow
+- Branch [`admin-ui-login-improvements`](https://github.com/zenflow/keystone/tree/admin-ui-login-improvements) by zenflow ([Pull Request](https://github.com/keystonejs/keystone/pull/2657))
 	- Used to implement 3rd party auth with passport for Ground Truth
+- Branch [`show-read-only-field-by-access-in-admin-ui`](https://github.com/gautamsi/keystone/tree/show-read-only-field-by-access-in-admin-ui) by gautamsi ([Pull Request](https://github.com/keystonejs/keystone/pull/2258))
+  - Used to show read only fields as disabled and grayed out
 
 <div align="center">
   <img src="website/static/readme-header.png" width="557">
