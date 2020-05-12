@@ -12,8 +12,9 @@ The development is done from the `master` branch.
 
 1. Run `yarn` to install the dependencies for the monorepo
 2. Ensure the MongoDB server is running (typically started by running `mongod`)
-3. Change directory to `projects/cms`
-4. Run `yarn dev` to start development
+3. Copy `.env.example` to `.env` and add environment variables
+4. Change directory to `projects/cms`
+5. Run `yarn dev` to start development
 
 To build for production, run `yarn build` instead.
 
