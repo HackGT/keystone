@@ -12,7 +12,7 @@ require('dotenv').config();
 const keystone = new Keystone({
   name: 'HackGT CMS',
   adapter: new MongooseAdapter({
-    mongoUri: process.env.MONGO_DB_URL
+    mongoUri: process.env.MONGO_URL
   })
 });
 
