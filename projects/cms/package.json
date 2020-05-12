@@ -20,6 +20,7 @@
     "@keystonejs/fields": "^9.0.5",
     "@keystonejs/fields-markdown": "^5.1.9",
     "@keystonejs/keystone": "^8.1.4",
+    "@keystonejs/list-plugins": "^5.2.0",
     "cross-env": "^7.0.0",
     "dotenv": "^8.2.0",
     "passport-oauth2": "^1.5.0",

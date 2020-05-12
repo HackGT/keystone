@@ -7,8 +7,8 @@ const {
   Text,
   CalendarDay
 } = require('@keystonejs/fields');
-
 const { Markdown } = require('@keystonejs/fields-markdown');
+const { atTracking, byTracking } = require('@keystonejs/list-plugins');
 
 const ACCESS_GENERAL = ({ authentication: { item: user } }) => Boolean(user);
 const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && (user.permissionLevel == 'TECH_TEAM' || user.permissionLevel == 'GENERAL'));
@@ -71,10 +71,10 @@ const TIMES = [
   "11:15 AM",
   "11:30 AM",
   "11:45 AM",
-  "00:00 PM",
-  "00:15 PM",
-  "00:30 PM",
-  "00:45 PM",
+  "12:00 PM",
+  "12:15 PM",
+  "12:30 PM",
+  "12:45 PM",
   "01:00 PM",
   "01:15 PM",
   "01:30 PM",
@@ -157,6 +157,10 @@ exports.Hackathon = {
   adminConfig: {
     defaultColumns: 'name, isActive'
   },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
 }
 
 exports.Event = {
@@ -246,7 +250,11 @@ exports.Event = {
 
       return resolvedData;
     }
-  }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
 }
 
 exports.Location = {
@@ -267,7 +275,11 @@ exports.Location = {
       type: Integer,
       isReadOnly: !ACCESS_ADMIN
     }
-  }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
 }
 
 exports.Type = {
@@ -283,7 +295,11 @@ exports.Type = {
       type: Text,
       isRequired: true
     }
-  }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
 }
 
 exports.FAQ = {
@@ -306,7 +322,11 @@ exports.FAQ = {
       isRequired: true
     }
   },
-  plural: 'FAQs'
+  plural: 'FAQs',
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
 }
 
 exports.Block = {
@@ -338,7 +358,11 @@ exports.Block = {
         { value: 'OTHER', label: 'Other' }
       ],
     },
-  }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
 }
 
 
@@ -379,5 +403,9 @@ exports.User = {
       ],
       access: ACCESS_ADMIN
     },
-  }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
 }
