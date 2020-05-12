@@ -190,7 +190,9 @@ exports.Event = {
     },
     startDay: {
       type: CalendarDay,
-      isRequired: true
+      isRequired: true,
+      format: 'M/d/yyyy',
+      schemaDoc: 'Format: MM/DD/YYYY'
     },
     startTime: {
       type: Select,
@@ -205,7 +207,9 @@ exports.Event = {
     },
     endDay: {
       type: CalendarDay,
-      isRequired: true
+      isRequired: true,
+      format: 'M/d/yyyy',
+      schemaDoc: 'Format: MM/DD/YYYY'
     },
     endTime: {
       type: Select,
