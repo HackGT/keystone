@@ -43,7 +43,6 @@ const groundTruthStrategy = keystone.createAuthStrategy({
     onAuthenticated: (data, req, res) => {
       res.redirect('/admin');
     },
-
     onError: (error, req, res) => {
       res.redirect('/error');
     },
