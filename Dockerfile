@@ -7,7 +7,8 @@ WORKDIR /usr/src/keystone
 COPY . /usr/src/keystone
 RUN yarn
 
-FROM node:12.4-alpine
+FROM node:10-alpine
+COPY --from=0 /user/src/keystone/projects/cms
 WORKDIR /user/src/keystone/projects/cms
 RUN yarn build
 EXPOSE 3000
