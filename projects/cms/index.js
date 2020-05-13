@@ -3,6 +3,9 @@ const { GraphQLApp } = require('@keystonejs/app-graphql');
 const { AdminUIApp } = require('@keystonejs/app-admin-ui');
 const { MongooseAdapter } = require('@keystonejs/adapter-mongoose');
 
+const expressSession = require('express-session');
+const MongoStore = require('connect-mongo')(expressSession);
+
 const { Hackathon, Event, Location, Type, FAQ, Block, User } = require('./schema');
 const GroundTruthAuthStrategy = require('./auth/GroundTruthAuthStrategy');
 const defaultUserPermissions = require('./defaultUserPermissions')
@@ -14,7 +17,9 @@ const keystone = new Keystone({
   name: 'HackGT CMS',
   adapter: new MongooseAdapter({
     mongoUri: process.env.MONGO_URL
-  })
+  }),
+  sessionStore: new MongoStore({ url: process.env.MONGO_URL }),
+  cookieSecret: process.env.COOKIE_SECRET
 });
 
 keystone.createList('Hackathon', Hackathon);
