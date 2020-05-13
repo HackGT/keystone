@@ -8,5 +8,4 @@ class GroundTruthAuthStrategy extends PassportAuthStrategy {
 }
 
 GroundTruthAuthStrategy.authType = 'groundTruth';
-
 module.exports = GroundTruthAuthStrategy;
