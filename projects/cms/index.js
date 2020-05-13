@@ -9,6 +9,7 @@ const defaultUserPermissions = require('./defaultUserPermissions')
 
 require('dotenv').config();
 
+
 const keystone = new Keystone({
   name: 'HackGT CMS',
   adapter: new MongooseAdapter({
