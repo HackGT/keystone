@@ -8,8 +8,8 @@ COPY . /usr/src/keystone
 RUN yarn
 
 FROM node:10-alpine
-COPY --from=0 /user/src/keystone/projects/cms /user/src/keystone/projects/cms
-WORKDIR /user/src/keystone/projects/cms
+COPY --from=0 /usr/src/keystone/projects/cms /usr/src/keystone/projects/cms
+WORKDIR /usr/src/keystone/projects/cms
 RUN yarn build
 EXPOSE 3000
 
