@@ -6,8 +6,10 @@ FROM node:10-alpine
 WORKDIR /usr/src/keystone
 COPY . /usr/src/keystone
 RUN yarn
-RUN cd /user/src/keystone/projects/cms; yarn build
 
-RUN cd /user/src/keystone/projects/cms
+FROM node:12.4-alpine
+WORKDIR /user/src/keystone/projects/cms
+RUN yarn build
 EXPOSE 3000
+
 CMD ["yarn", "start"]
