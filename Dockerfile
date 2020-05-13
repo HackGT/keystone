@@ -11,7 +11,8 @@ RUN yarn
 FROM node:10-alpine
 COPY --from=0 /usr/src/keystone/projects/cms /usr/src/keystone/projects/cms
 WORKDIR /usr/src/keystone/projects/cms
-RUN yarn
-EXPOSE 3000
+RUN yarn build
 
-CMD ["yarn", "build", ";", "yarn", "start"]
+EXPOSE 3000
+WORKDIR /usr/src/keystone/projects/cms
+CMD ["yarn", "start"]
