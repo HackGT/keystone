@@ -8,5 +8,6 @@ COPY . /usr/src/keystone
 RUN yarn
 RUN cd /user/src/keystone/projects/cms; yarn build
 
+RUN cd /user/src/keystone/projects/cms
 EXPOSE 3000
-CMD cd /user/src/keystone/projects/cms; yarn start
+CMD ["yarn", "start"]
