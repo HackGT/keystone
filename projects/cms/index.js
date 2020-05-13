@@ -1,6 +1,7 @@
 const { Keystone } = require('@keystonejs/keystone');
 const { GraphQLApp } = require('@keystonejs/app-graphql');
 const { AdminUIApp } = require('@keystonejs/app-admin-ui');
+const { StaticApp } = require('@keystonejs/app-static');
 const { MongooseAdapter } = require('@keystonejs/adapter-mongoose');
 
 const expressSession = require('express-session');
@@ -72,10 +73,17 @@ const adminApp = new AdminUIApp({
   hooks: require.resolve('./admin/'),
 })
 
+const staticApp = new StaticApp({
+  path: '/',
+  src: 'public',
+  fallback: 'index.html',
+})
+
 module.exports = {
   keystone,
   apps: [
     graphQLApp,
-    adminApp
+    adminApp,
+    staticApp
   ],
 };
