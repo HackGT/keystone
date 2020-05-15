@@ -35,12 +35,15 @@ module.exports = {
     }
     let resolvedDistDir = path.resolve(_cwd, distDir);
     spinner.start(`Exporting Keystone build to ./${path.relative(_cwd, resolvedDistDir)}`);
-
+    console.log("remove resolved1");
     await fs.remove(resolvedDistDir);
-
+    console.log("remove resolved2");
     if (apps) {
       await Promise.all(
-        apps.filter(app => app.build).map(app => app.build({ distDir: resolvedDistDir, keystone }))
+        apps.filter(app => app.build).map(app => {
+          console.log("app",app)
+          app.build({ distDir: resolvedDistDir, keystone })
+        })
       );
 
       spinner.succeed(
