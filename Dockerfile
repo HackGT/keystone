@@ -9,5 +9,12 @@ COPY . /usr/src/keystone
 
 RUN yarn
 
+FROM node:10-alpine
+
+COPY --from=0 /usr/src/keystone/projects/cms/ /usr/src/keystone/projects/cms/
+
+WORKDIR /usr/src/keystone
 EXPOSE 3000
-CMD ["yarn", "cms"]
+
+WORKDIR /usr/src/keystone/projects/cms
+CMD ["yarn", "build", ";", "yarn", "start"]
