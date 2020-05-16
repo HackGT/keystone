@@ -1,6 +1,9 @@
 git:
   branch: master
 
+wants:
+  mongo: true
+
 secrets:
   - COOKIE_SECRET
   - GROUND_TRUTH_CLIENT_SECRET
