@@ -4,8 +4,8 @@ const { AdminUIApp } = require('@keystonejs/app-admin-ui');
 const { StaticApp } = require('@keystonejs/app-static');
 const { MongooseAdapter } = require('@keystonejs/adapter-mongoose');
 
-const expressSession = require('express-session');
-const MongoStore = require('connect-mongo')(expressSession);
+//const expressSession = require('express-session');
+//const MongoStore = require('connect-mongo')(expressSession);
 
 const { Hackathon, Event, Location, Type, FAQ, Block, User } = require('./schema');
 const GroundTruthAuthStrategy = require('./auth/GroundTruthAuthStrategy');
@@ -13,15 +13,16 @@ const defaultUserPermissions = require('./defaultUserPermissions')
 
 require('dotenv').config();
 
-
+console.log('Before keystone')
 const keystone = new Keystone({
   name: 'HackGT CMS',
   adapter: new MongooseAdapter({
     mongoUri: process.env.MONGO_URL
   }),
-  sessionStore: new MongoStore({ url: process.env.MONGO_URL }),
+  //sessionStore: new MongoStore({ url: process.env.MONGO_URL }),
   cookieSecret: process.env.COOKIE_SECRET
 });
+console.log('After keystone')
 
 keystone.createList('Hackathon', Hackathon);
 keystone.createList('Event', Event);
