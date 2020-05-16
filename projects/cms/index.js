@@ -19,8 +19,8 @@ const keystone = new Keystone({
   adapter: new MongooseAdapter({
     mongoUri: process.env.MONGO_URL
   }),
-  sessionStore: new MongoStore({ url: process.env.MONGO_URL || "" }),
-  cookieSecret: process.env.COOKIE_SECRET || ""
+  sessionStore: new MongoStore({ url: process.env.MONGO_URL }),
+  cookieSecret: process.env.COOKIE_SECRET
 });
 
 keystone.createList('Hackathon', Hackathon);
