@@ -241,7 +241,6 @@ const ItemDetails = ({
     const { id } = data[list.gqlNames.createMutationName];
     history.push(`${adminPath}/${list.path}/${id}`);
   };
-  console.log(list);
   return (
     <Fragment>
       {itemHasChanged.current && !deleteConfirmed.current && <PreventNavigation />}
@@ -395,8 +394,8 @@ const ItemPage = ({ list, itemId }) => {
         loading || !data
           ? {}
           : data[list.gqlNames.itemQueryName]
-          ? data[list.gqlNames.itemQueryName]
-          : {}
+            ? data[list.gqlNames.itemQueryName]
+            : {}
       ),
   ]);
 

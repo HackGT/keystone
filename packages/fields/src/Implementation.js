@@ -20,6 +20,7 @@ class Field {
   ) {
     this.path = path;
     this.isPrimaryKey = path === 'id';
+    this.isReadOnly = isReadOnly;
     this.schemaDoc = schemaDoc;
     this.adminDoc = adminDoc;
     this.adminConfig = adminConfig;
@@ -50,9 +51,6 @@ class Field {
       defaultAccess,
       access,
     });
-    console.log("create", this.access.public.create)
-    console.log("update",this.access.public.update)
-    this.isReadOnly = !(this.access.public.create || this.access.public.update);
   }
 
   parseFieldAccess(args) {
