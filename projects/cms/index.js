@@ -19,8 +19,11 @@ const keystone = new Keystone({
   adapter: new MongooseAdapter({
     mongoUri: process.env.MONGO_URL
   }),
-  sessionStore: new MongoStore({ url: process.env.MONGO_URL }),
-  cookieSecret: process.env.COOKIE_SECRET
+  cookie: {
+    secure: false,//process.env.NODE_ENV === 'production', // Default to true in production
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    sameSite: false,
+  }
 });
 console.log('After keystone')
 
