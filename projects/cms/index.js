@@ -14,7 +14,12 @@ const keystone = new Keystone({
   name: 'HackGT CMS',
   adapter: new MongooseAdapter({
     mongoUri: process.env.MONGO_URL,
-  })
+  }),
+  cookie: {		
+     secure: process.env.NODE_ENV === 'production', // Default to true in production		
+     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days		
+     sameSite: false,		
+  }
 });
 
 keystone.createList('Hackathon', Hackathon);
