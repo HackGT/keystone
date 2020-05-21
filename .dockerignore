@@ -2,8 +2,8 @@
 docs/
 demo-projects/
 test-projects/
+website/
 projects/cms/dist/*
 projects/cms/node_modules/*
-website/
 node_modules/*
 **/.env
