@@ -75,5 +75,8 @@ const staticApp = new StaticApp({
 
 module.exports = {
   keystone,
-  apps: [graphQLApp, adminApp, staticApp]
+  apps: [graphQLApp, adminApp, staticApp],
+  configureExpress: app => {
+    app.set('trust proxy', true);
+  }
 };
