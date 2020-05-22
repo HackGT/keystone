@@ -4,6 +4,9 @@ const { AdminUIApp } = require('@keystonejs/app-admin-ui');
 const { StaticApp } = require('@keystonejs/app-static');
 const { MongooseAdapter } = require('@keystonejs/adapter-mongoose');
 
+const expressSession = require('express-session');
+const MongoStore = require('connect-mongo')(expressSession);
+
 const { Hackathon, Event, Location, Type, FAQ, Block, User } = require('./schema');
 const GroundTruthAuthStrategy = require('./auth/GroundTruthAuthStrategy');
 const defaultUserPermissions = require('./defaultUserPermissions');
@@ -15,7 +18,9 @@ const keystone = new Keystone({
   adapter: new MongooseAdapter({
     mongoUri: process.env.MONGO_URL,
   }),
-  cookieSecret: process.env.COOKIE_SECRET
+  cookieSecret: process.env.COOKIE_SECRET,
+  // Fixes build error - https://github.com/keystonejs/keystone/issues/2350
+  sessionStore: !process.env.BUILD_STAGE ? new MongoStore({ url: process.env.MONGO_URL }) : null
 });
 
 keystone.createList('Hackathon', Hackathon);

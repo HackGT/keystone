@@ -25,6 +25,7 @@ ENV GROUND_TRUTH_CLIENT_ID default
 ENV GROUND_TRUTH_CLIENT_SECRET default
 ENV MONGO_URL mongodb://localhost:27017/keystone
 ENV COOKIE_SECRET default
+ENV BUILD_STAGE true
 RUN yarn && yarn build
 
 EXPOSE 3000
