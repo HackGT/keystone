@@ -20,7 +20,7 @@ const keystone = new Keystone({
   }),
   cookieSecret: process.env.COOKIE_SECRET,
   // Fixes build error - https://github.com/keystonejs/keystone/issues/2350
-  sessionStore: !process.env.BUILD_STAGE ? new MongoStore({ url: process.env.MONGO_URL }) : null
+  sessionStore: process.env.BUILD_STAGE == "true" ? null : new MongoStore({ url: process.env.MONGO_URL })
 });
 
 keystone.createList('Hackathon', Hackathon);
