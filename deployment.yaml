@@ -10,3 +10,4 @@ secrets:
 env:
   GROUND_TRUTH_CLIENT_ID: 6e40bfdebb7692420939f5156b902bd227feb3cd4cf048e37b7d127eb191357d
   GROUND_TRUTH_URL: https://login.hack.gt
+  BUILD_STAGE: false
