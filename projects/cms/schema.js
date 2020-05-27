@@ -10,12 +10,15 @@ const {
 const { Markdown } = require('@keystonejs/fields-markdown');
 const { atTracking, byTracking } = require('@keystonejs/list-plugins');
 
-const ACCESS_GENERAL = ({ authentication: { item: user } }) => Boolean(user);
+const ACCESS_OPEN = ({ authentication: { item: user } }) => Boolean(!user || (user && user.permissionLevel != 'NONE'));
+const ACCESS_GENERAL = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel != 'NONE');
 const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && (user.permissionLevel == 'TECH_TEAM' || user.permissionLevel == 'GENERAL'));
 const ACCESS_ADMIN = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel == 'ADMIN');
 
 const IS_ADMIN_OR_FILTER = (user, filter) => {
-  if (Boolean(user && user.permissionLevel == 'ADMIN')) {
+  if (Boolean(user && user.permissionLevel == 'NONE')) {
+    return false;
+  } else if (Boolean(user && user.permissionLevel == 'ADMIN')) {
     return {};
   }
 
@@ -264,7 +267,7 @@ exports.Event = {
 exports.Location = {
   access: {
     create: ACCESS_GENERAL,
-    read: true,
+    read: ACCESS_OPEN,
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL
   },
@@ -289,7 +292,7 @@ exports.Location = {
 exports.Type = {
   access: {
     create: ACCESS_ADMIN,
-    read: true,
+    read: ACCESS_OPEN,
     update: ACCESS_ADMIN,
     delete: ACCESS_ADMIN
   },
@@ -309,7 +312,7 @@ exports.Type = {
 exports.FAQ = {
   access: {
     create: ACCESS_GENERAL,
-    read: true,
+    read: ACCESS_OPEN,
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL
   },
@@ -336,7 +339,7 @@ exports.FAQ = {
 exports.Block = {
   access: {
     create: ACCESS_GENERAL,
-    read: true,
+    read: ACCESS_OPEN,
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL
   },
@@ -403,7 +406,8 @@ exports.User = {
       options: [
         { value: 'ADMIN', label: 'Admin - Can read/write everything' },
         { value: 'TECH_TEAM', label: 'Tech Team - Can read/write most things' },
-        { value: 'GENERAL', label: 'General - Can read/write only essentials' }
+        { value: 'GENERAL', label: 'General - Can read/write essentials' },
+        { value: 'NONE', label: 'None - Cannot view dashboard' }
       ],
       access: ACCESS_ADMIN
     },
