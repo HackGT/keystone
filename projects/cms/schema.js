@@ -154,7 +154,8 @@ exports.Hackathon = {
       many: true
     },
     isActive: {
-      type: Checkbox
+      type: Checkbox,
+      defaultValue: true
     }
   },
   adminConfig: {
@@ -195,7 +196,9 @@ exports.Event = {
       type: CalendarDay,
       isRequired: true,
       format: 'M/d/yyyy',
-      schemaDoc: 'Format: MM/DD/YYYY'
+      adminDoc: 'Format: MM/DD/YYYY',
+      yearRangeFrom: 2020,
+      yearRangeTo: 2040
     },
     startTime: {
       type: Select,
@@ -206,13 +209,19 @@ exports.Event = {
     },
     startDate: {
       type: DateTime,
-      access: false
+      access: {
+        create: false,
+        read: true,
+        update: false
+      }
     },
     endDay: {
       type: CalendarDay,
       isRequired: true,
       format: 'M/d/yyyy',
-      schemaDoc: 'Format: MM/DD/YYYY'
+      adminDoc: 'Format: MM/DD/YYYY',
+      yearRangeFrom: 2020,
+      yearRangeTo: 2040
     },
     endTime: {
       type: Select,
@@ -223,7 +232,11 @@ exports.Event = {
     },
     endDate: {
       type: DateTime,
-      access: false
+      access: {
+        create: false,
+        read: true,
+        update: false
+      }
     },
     description: {
       type: Text,
@@ -240,7 +253,8 @@ exports.Event = {
     }
   },
   adminConfig: {
-    defaultColumns: 'name, startTime, endTime, type'
+    defaultColumns: 'name, startTime, endTime, type',
+    defaultSort: 'startDate'
   },
   hooks: {
     // Existing Item is the whole event data, while resolved data only holds the changed data
@@ -366,6 +380,9 @@ exports.Block = {
       ],
     },
   },
+  adminConfig: {
+    defaultColumns: 'name, slug, usage'
+  },
   plugins: [
     atTracking({ access: false }),
     byTracking({ access: false })
@@ -399,7 +416,8 @@ exports.User = {
     groundTruthId: {
       type: Text,
       label: 'Ground truth ID',
-      access: readAdminAccess
+      access: readAdminAccess,
+      isRequired: true
     },
     permissionLevel: {
       type: Select,
@@ -409,8 +427,12 @@ exports.User = {
         { value: 'GENERAL', label: 'General - Can read/write essentials' },
         { value: 'NONE', label: 'None - Cannot view dashboard' }
       ],
-      access: ACCESS_ADMIN
+      access: ACCESS_ADMIN,
+      isRequired: true
     },
+  },
+  adminConfig: {
+    defaultColumns: 'name, email, permissionLevel'
   },
   plugins: [
     atTracking({ access: false }),
