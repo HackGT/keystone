@@ -5,15 +5,33 @@ const {
   Relationship,
   Select,
   Text,
-  CalendarDay
+  Url,
+  CalendarDay,
+  File
 } = require('@keystonejs/fields');
+const { LocalFileAdapter } = require('@keystonejs/file-adapters');
+const CloudStorageAdapter = require('./packages/keystone-google-cloud-storage-adapter')
+
 const { Markdown } = require('@keystonejs/fields-markdown');
 const { atTracking, byTracking } = require('@keystonejs/list-plugins');
-
 const ACCESS_OPEN = ({ authentication: { item: user } }) => Boolean(!user || (user && user.permissionLevel != 'NONE'));
 const ACCESS_GENERAL = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel != 'NONE');
 const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && (user.permissionLevel == 'TECH_TEAM' || user.permissionLevel == 'GENERAL'));
 const ACCESS_ADMIN = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel == 'ADMIN');
+
+var fileAdaptor = new CloudStorageAdapter({
+    cloudStorage: {
+      keyFilename: 'key.json',
+      path: 'uploads/',
+      bucket: 'hackgt-cms-files',
+      uploadOptions: {
+        public: true
+      }
+    },
+    schema: {
+      url: true,
+    }
+})
 
 const IS_ADMIN_OR_FILTER = (user, filter) => {
   if (Boolean(user && user.permissionLevel == 'NONE')) {
@@ -130,7 +148,50 @@ const readAdminAccess = {
   update: ACCESS_ADMIN,
   delete: ACCESS_ADMIN
 }
-
+exports.Block = {
+  access: {
+    create: ACCESS_GENERAL,
+    read: ACCESS_OPEN,
+    update: ACCESS_GENERAL,
+    delete: ACCESS_GENERAL
+  },
+  adminDoc: 'Content blocks for website and mobile app',
+  fields: {
+    name: {
+      type: Text,
+      isRequired: true
+    },
+    slug: {
+      type: Text,
+      isRequired: true
+    },
+    content: {
+      type: Markdown,
+      isRequired: true
+    },
+    usage: {
+      type: Select,
+      options: [
+        { value: 'MOBILE', label: 'Mobile app' },
+        { value: 'WEB', label: 'Website' },
+        { value: 'OTHER', label: 'Other' }
+      ],
+    },
+    hackathons: {
+      type: Relationship,
+      ref: 'Hackathon.blocks',
+      many: true,
+      isRequired: true
+    }
+  },
+  adminConfig: {
+    defaultColumns: 'name, slug, usage'
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
+}
 exports.Hackathon = {
   access: {
     create: ACCESS_ADMIN,
@@ -153,6 +214,14 @@ exports.Hackathon = {
       ref: 'Event.hackathon',
       many: true
     },
+    blocks: {
+      type: Relationship,
+      ref: 'Block.hackathons',
+      many: true
+    },
+    slackUrl: {
+      type: Url
+  },
     isActive: {
       type: Checkbox,
       defaultValue: true
@@ -166,7 +235,47 @@ exports.Hackathon = {
     byTracking({ access: false })
   ]
 }
-
+exports.Sponsor = {
+  access: {
+    create: ACCESS_GENERAL,
+    read: ACCESS_OPEN,
+    update: ACCESS_GENERAL,
+    delete: ACCESS_GENERAL
+  },
+  adminDoc: 'Sponsors',
+  fields: {
+    name: {
+        type: Text,
+        isRequired: true
+    },
+    website: {
+        type: Url,
+        isRequired: true
+    },
+    image: {
+      type: File,
+      adapter: fileAdaptor,
+      hooks: {
+        beforeChange: async ({ existingItem }) => {
+          if (existingItem && existingItem.file) {
+            await fileAdapter.delete(existingItem.file);
+          }
+        },
+      },
+    },
+  },
+  hooks: {
+    afterDelete: async ({ existingItem }) => {
+      if (existingItem.file) {
+        await fileAdapter.delete(existingItem.file);
+      }
+    },
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
+}
 exports.Event = {
   access: {
     create: ACCESS_GENERAL,
@@ -350,44 +459,7 @@ exports.FAQ = {
   ]
 }
 
-exports.Block = {
-  access: {
-    create: ACCESS_GENERAL,
-    read: ACCESS_OPEN,
-    update: ACCESS_GENERAL,
-    delete: ACCESS_GENERAL
-  },
-  adminDoc: 'Content blocks for website and mobile app',
-  fields: {
-    name: {
-      type: Text,
-      isRequired: true
-    },
-    slug: {
-      type: Text,
-      isRequired: true
-    },
-    content: {
-      type: Markdown,
-      isRequired: true
-    },
-    usage: {
-      type: Select,
-      options: [
-        { value: 'MOBILE', label: 'Mobile app' },
-        { value: 'WEB', label: 'Website' },
-        { value: 'OTHER', label: 'Other' }
-      ],
-    },
-  },
-  adminConfig: {
-    defaultColumns: 'name, slug, usage'
-  },
-  plugins: [
-    atTracking({ access: false }),
-    byTracking({ access: false })
-  ]
-}
+
 
 
 exports.User = {

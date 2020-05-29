@@ -111,7 +111,7 @@ export class File extends Implementation {
 
     const newId = new ObjectId();
 
-    const { id, filename, _meta } = await this.fileAdapter.save({
+    const { id, filename, _meta, url } = await this.fileAdapter.save({
       stream,
       filename: originalFilename,
       mimetype,
@@ -119,7 +119,7 @@ export class File extends Implementation {
       id: newId,
     });
 
-    return { id, filename, originalFilename, mimetype, encoding, _meta };
+    return { id, filename, originalFilename, mimetype, encoding, _meta, url };
   }
 
   get gqlUpdateInputFields() {
