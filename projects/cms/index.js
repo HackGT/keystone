@@ -47,7 +47,6 @@ const groundTruthStrategy = keystone.createAuthStrategy({
     onError: (error, req, res) => {
       res.redirect('/error');
     },
-
     resolveCreateData: ({ createData, serviceProfile }, req, res) => {
       if (!serviceProfile.name || !serviceProfile.email) {
         res.redirect('/error');
