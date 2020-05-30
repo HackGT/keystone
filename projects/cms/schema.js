@@ -20,12 +20,16 @@ const ACCESS_GENERAL = ({ authentication: { item: user } }) => Boolean(user && u
 const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && (user.permissionLevel == 'TECH_TEAM' || user.permissionLevel == 'GENERAL'));
 const ACCESS_ADMIN = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel == 'ADMIN');
 
-// buff = (new Buffer(process.env.GOOGLE_SERVICE_KEY, 'base64')).toString('utf8');
+start = "-----BEGIN PRIVATE KEY-----\n"
+msg = process.env.GOOGLE_PROMISE
+end = "\n-----END PRIVATE KEY-----\n"
+pem = `${start}${msg}${end}`
+
 cred = {
   "type": "service_account",
   "project_id": "hackgt-cluster",
   "private_key_id": "2c5ac1db5cfa95aa136172d5959affb2f6311051",
-  "private_key": process.env.GOOGLE_PRIVATE,
+  "private_key": pem,
   "client_email": "hackgt-storage@hackgt-cluster.iam.gserviceaccount.com",
   "client_id": "112216606107657666067",
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
