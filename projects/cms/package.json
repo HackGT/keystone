@@ -26,7 +26,6 @@
     "connect-mongo": "^3.2.0",
     "cross-env": "^7.0.0",
     "dotenv": "^8.2.0",
-    "keystone-google-cloud-storage-adapter": "^0.0.3",
     "passport-oauth2": "^1.5.0",
     "url": "^0.11.0"
   },

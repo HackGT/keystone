@@ -167,6 +167,7 @@ const readAdminAccess = {
   update: ACCESS_ADMIN,
   delete: ACCESS_ADMIN
 }
+
 exports.Block = {
   access: {
     create: ACCESS_GENERAL,
