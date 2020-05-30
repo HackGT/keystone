@@ -21,7 +21,7 @@ const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user &&
 const ACCESS_ADMIN = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel == 'ADMIN');
 
 start = "-----BEGIN PRIVATE KEY-----\n"
-msg = process.env.GOOGLE_PROMISE
+msg = process.env.GOOGLE_PRIVATE
 end = "\n-----END PRIVATE KEY-----\n"
 pem = `${start}${msg}${end}`
 
