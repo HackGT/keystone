@@ -15,9 +15,9 @@ function CloudStorageAdapter (options, schema) {
 
   this.client = storage(this.options)
 
-  if (options.keyFilename != null && !pathlib.isAbsolute(options.keyFilename)) {
-    throw Error('Configuration error, incorrect keyfile')
-  }
+  // if (options.keyFilename != null && !pathlib.isAbsolute(options.keyFilename)) {
+  //   throw Error('Configuration error, incorrect keyfile')
+  // }
 
   this.options.generateFilename = ensureCallback(this.options.generateFilename)
 
@@ -87,7 +87,10 @@ CloudStorageAdapter.prototype.save = async function (file, callback) {
     self.client
       .bucket(self.options.bucket)
       .upload(localpath, uploadOptions, function (err, response) {
-        if (err) return callback(err)
+        if (err) {
+            console.log(err)
+            return callback(err)
+        }
 
         const metadata = response.metadata || {}
 

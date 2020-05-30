@@ -9,6 +9,7 @@ const {
   CalendarDay,
   File
 } = require('@keystonejs/fields');
+require('dotenv').config()
 const { LocalFileAdapter } = require('@keystonejs/file-adapters');
 const CloudStorageAdapter = require('./packages/keystone-google-cloud-storage-adapter')
 
@@ -19,9 +20,23 @@ const ACCESS_GENERAL = ({ authentication: { item: user } }) => Boolean(user && u
 const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && (user.permissionLevel == 'TECH_TEAM' || user.permissionLevel == 'GENERAL'));
 const ACCESS_ADMIN = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel == 'ADMIN');
 
+// buff = (new Buffer(process.env.GOOGLE_SERVICE_KEY, 'base64')).toString('utf8');
+cred = {
+  "type": "service_account",
+  "project_id": "hackgt-cluster",
+  "private_key_id": "2c5ac1db5cfa95aa136172d5959affb2f6311051",
+  "private_key": process.env.GOOGLE_PRIVATE,
+  "client_email": "hackgt-storage@hackgt-cluster.iam.gserviceaccount.com",
+  "client_id": "112216606107657666067",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/hackgt-storage%40hackgt-cluster.iam.gserviceaccount.com"
+}
+
 var fileAdaptor = new CloudStorageAdapter({
     cloudStorage: {
-      keyFilename: 'key.json',
+      credentials: cred,
       path: 'uploads/',
       bucket: 'hackgt-cms-files',
       uploadOptions: {
