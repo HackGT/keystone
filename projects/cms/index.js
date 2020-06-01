@@ -7,7 +7,7 @@ const { MongooseAdapter } = require('@keystonejs/adapter-mongoose');
 const expressSession = require('express-session');
 const MongoStore = require('connect-mongo')(expressSession);
 
-const { Hackathon, Event, Location, Type, FAQ, Block, User, Sponsor } = require('./schema');
+const { Hackathon, Event, Location, Type, FAQ, Block, User, Sponsor, SocialAccount } = require('./schema');
 const GroundTruthAuthStrategy = require('./auth/GroundTruthAuthStrategy');
 const defaultUserPermissions = require('./defaultUserPermissions');
 
@@ -31,6 +31,7 @@ keystone.createList('Block', Block);
 keystone.createList('Type', Type);
 keystone.createList('User', User);
 keystone.createList('Sponsor', Sponsor);
+keystone.createList('SocialAccount', SocialAccount);
 
 const groundTruthStrategy = keystone.createAuthStrategy({
   type: GroundTruthAuthStrategy,

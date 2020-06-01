@@ -19,7 +19,7 @@ require('dotenv').config()
 
 const ACCESS_OPEN = ({ authentication: { item: user } }) => Boolean(!user || (user && user.permissionLevel != 'NONE'));
 const ACCESS_GENERAL = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel != 'NONE');
-const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && (user.permissionLevel == 'TECH_TEAM' || user.permissionLevel == 'GENERAL'));
+const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && (user.permissionLevel == 'ADMIN' || user.permissionLevel == 'TECH_TEAM'));
 const ACCESS_ADMIN = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel == 'ADMIN');
 
 start = "-----BEGIN PRIVATE KEY-----\n"
@@ -214,6 +214,7 @@ exports.Block = {
     byTracking({ access: false })
   ]
 }
+
 exports.Hackathon = {
   access: {
     create: ACCESS_ADMIN,
@@ -241,9 +242,14 @@ exports.Hackathon = {
       ref: 'Block.hackathons',
       many: true
     },
+    sponsors: {
+      type: Relationship,
+      ref: 'Sponsor.hackathons',
+      many: true
+    },
     slackUrl: {
       type: Url
-  },
+    },
     isActive: {
       type: Checkbox,
       defaultValue: true
@@ -257,6 +263,7 @@ exports.Hackathon = {
     byTracking({ access: false })
   ]
 }
+
 exports.Sponsor = {
   access: {
     create: ACCESS_GENERAL,
@@ -264,15 +271,15 @@ exports.Sponsor = {
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL
   },
-  adminDoc: 'Sponsors',
+  adminDoc: 'Sponsors for the hackathon',
   fields: {
     name: {
-        type: Text,
-        isRequired: true
+      type: Text,
+      isRequired: true
     },
     website: {
-        type: Url,
-        isRequired: true
+      type: Url,
+      isRequired: true
     },
     image: {
       type: File,
@@ -285,6 +292,12 @@ exports.Sponsor = {
         },
       },
     },
+    hackathons: {
+      type: Relationship,
+      ref: 'Hackathon.sponsors',
+      many: true,
+      isRequired: true
+    }
   },
   hooks: {
     afterDelete: async ({ existingItem }) => {
@@ -298,6 +311,31 @@ exports.Sponsor = {
     byTracking({ access: false })
   ]
 }
+
+exports.SocialAccount = {
+  access: {
+    create: ACCESS_TECH_TEAM,
+    read: ACCESS_OPEN,
+    update: ACCESS_TECH_TEAM,
+    delete: ACCESS_TECH_TEAM
+  },
+  adminDoc: 'HackGT social media links',
+  fields: {
+    name: {
+      type: Text,
+      isRequired: true
+    },
+    url: {
+      type: Url,
+      isRequired: true
+    }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
+}
+
 exports.Event = {
   access: {
     create: ACCESS_GENERAL,
@@ -436,10 +474,10 @@ exports.Location = {
 
 exports.Type = {
   access: {
-    create: ACCESS_ADMIN,
+    create: ACCESS_TECH_TEAM,
     read: ACCESS_OPEN,
-    update: ACCESS_ADMIN,
-    delete: ACCESS_ADMIN
+    update: ACCESS_TECH_TEAM,
+    delete: ACCESS_TECH_TEAM
   },
   adminDoc: 'Types of hackathon events',
   fields: {
@@ -480,9 +518,6 @@ exports.FAQ = {
     byTracking({ access: false })
   ]
 }
-
-
-
 
 exports.User = {
   access: {
