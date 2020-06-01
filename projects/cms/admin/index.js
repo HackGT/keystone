@@ -16,7 +16,7 @@ export default {
         },
         {
           label: 'Content',
-          children: ['FAQ', 'Block', 'Sponsor']
+          children: ['FAQ', 'Block', 'Sponsor', 'BrandAsset']
         }
       ]
     },
