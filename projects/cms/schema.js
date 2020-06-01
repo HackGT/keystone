@@ -525,9 +525,13 @@ exports.BrandAsset = {
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL
   },
-  adminDoc: 'Branding assets for HackGTT',
+  adminDoc: 'Branding assets for HackGT',
   fields: {
     name: {
+      type: Text,
+      isRequired: true
+    },
+    slug: {
       type: Text,
       isRequired: true
     },
