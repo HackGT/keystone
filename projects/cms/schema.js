@@ -296,8 +296,8 @@ exports.Sponsor = {
       adapter: fileAdaptor,
       hooks: {
         beforeChange: async ({ existingItem }) => {
-          if (existingItem && existingItem.file) {
-            await fileAdapter.delete(existingItem.file);
+          if (existingItem && existingItem.image) {
+            await fileAdapter.delete(existingItem.image);
           }
         }
       }
@@ -311,8 +311,8 @@ exports.Sponsor = {
   },
   hooks: {
     afterDelete: async ({ existingItem }) => {
-      if (existingItem.file) {
-        await fileAdapter.delete(existingItem.file);
+      if (existingItem.image) {
+        await fileAdapter.delete(existingItem.image);
       }
     },
   },
@@ -540,8 +540,8 @@ exports.BrandAsset = {
       adapter: fileAdaptor,
       hooks: {
         beforeChange: async ({ existingItem }) => {
-          if (existingItem && existingItem.file) {
-            await fileAdapter.delete(existingItem.file);
+          if (existingItem && existingItem.image) {
+            await fileAdapter.delete(existingItem.image);
           }
         }
       }
@@ -558,8 +558,8 @@ exports.BrandAsset = {
   ],
   hooks: {
     afterDelete: async ({ existingItem }) => {
-      if (existingItem.file) {
-        await fileAdapter.delete(existingItem.file);
+      if (existingItem.image) {
+        await fileAdapter.delete(existingItem.image);
       }
     }
   }
