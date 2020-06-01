@@ -9,12 +9,14 @@ const {
   CalendarDay,
   File
 } = require('@keystonejs/fields');
-require('dotenv').config()
-const { LocalFileAdapter } = require('@keystonejs/file-adapters');
+
 const CloudStorageAdapter = require('./packages/keystone-google-cloud-storage-adapter')
 
 const { Markdown } = require('@keystonejs/fields-markdown');
 const { atTracking, byTracking } = require('@keystonejs/list-plugins');
+
+require('dotenv').config()
+
 const ACCESS_OPEN = ({ authentication: { item: user } }) => Boolean(!user || (user && user.permissionLevel != 'NONE'));
 const ACCESS_GENERAL = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel != 'NONE');
 const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && (user.permissionLevel == 'TECH_TEAM' || user.permissionLevel == 'GENERAL'));
