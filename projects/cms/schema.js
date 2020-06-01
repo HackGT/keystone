@@ -40,7 +40,7 @@ cred = {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/hackgt-storage%40hackgt-cluster.iam.gserviceaccount.com"
 }
 
-var fileAdaptor = new CloudStorageAdapter({
+var fileAdapter = new CloudStorageAdapter({
   cloudStorage: {
     credentials: cred,
     path: 'uploads/',
@@ -293,7 +293,7 @@ exports.Sponsor = {
     },
     image: {
       type: File,
-      adapter: fileAdaptor,
+      adapter: fileAdapter,
       hooks: {
         beforeChange: async ({ existingItem }) => {
           if (existingItem && existingItem.image) {
@@ -537,7 +537,7 @@ exports.BrandAsset = {
     },
     image: {
       type: File,
-      adapter: fileAdaptor,
+      adapter: fileAdapter,
       hooks: {
         beforeChange: async ({ existingItem }) => {
           if (existingItem && existingItem.image) {

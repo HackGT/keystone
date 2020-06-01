@@ -70,7 +70,11 @@ CloudStorageAdapter.prototype.save = async function (file, callback) {
   const self = this
 
   var saveData = await new Promise((resolve, reject) => this.options.generateFilename(file, 0, function (err, filename) {
-    if (err) return callback(err)
+    if (err) {
+        console.log(err)
+        reject(err)
+        return
+    }
     const localpath = self._resolveFilename(file)
     file.path = self.options.path
     if (self.options.uniqueFilename) {
@@ -89,7 +93,7 @@ CloudStorageAdapter.prototype.save = async function (file, callback) {
       .upload(localpath, uploadOptions, function (err, response) {
         if (err) {
             console.log(err)
-            return callback(err)
+            return err
         }
 
         const metadata = response.metadata || {}
@@ -120,32 +124,38 @@ CloudStorageAdapter.prototype.publicUrl = function (file) {
   return file.url
 }
 
-CloudStorageAdapter.prototype.removeFile = function (file, callback) {
+CloudStorageAdapter.prototype.delete = function (file, callback) {
   const fullpath = this._resolveRemoteFilename(file)
+  console.log(file.bucket)
   this._clientForFile(file)
-    .bucket(file.bucket)
+    .bucket(this.options.bucket)
     .file(fullpath)
     .delete(function (err) {
-      if (err) return callback(err)
-
-      callback()
+      if (err) {
+          console.log(err)
+          return err
+      }
+      return
     })
 }
 
-CloudStorageAdapter.prototype.fileExists = function (filename, callback) {
+CloudStorageAdapter.prototype.fileExists = async function (filename, callback) {
   const fullpath = this._resolveRemoteFilename({
     filename: filename
   })
-  this.client
-    .bucket(this.options.bucket)
-    .file(fullpath)
-    .exists(function (err, exists) {
-      if (err) return callback(err)
+  return await new Promise((resolve, reject) => {
+      this.client
+      .bucket(this.options.bucket)
+      .file(fullpath)
+      .exists(function (err, exists) {
+          if (err) {
+              console.log(err)
+              reject(err)
+          }
+          resolve(!exists)
+      })
+  })
 
-      if (!exists) return callback()
-
-      callback(null, exists)
-    })
 }
 
 module.exports = CloudStorageAdapter
