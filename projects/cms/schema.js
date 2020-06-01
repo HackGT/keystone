@@ -41,17 +41,17 @@ cred = {
 }
 
 var fileAdaptor = new CloudStorageAdapter({
-    cloudStorage: {
-      credentials: cred,
-      path: 'uploads/',
-      bucket: 'hackgt-cms-files',
-      uploadOptions: {
-        public: true
-      }
-    },
-    schema: {
-      url: true,
+  cloudStorage: {
+    credentials: cred,
+    path: 'uploads/',
+    bucket: 'hackgt-cms-files',
+    uploadOptions: {
+      public: true
     }
+  },
+  schema: {
+    url: true,
+  }
 })
 
 const IS_ADMIN_OR_FILTER = (user, filter) => {
