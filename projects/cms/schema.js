@@ -9,32 +9,18 @@ const {
     CalendarDay,
     File
 } = require('@keystonejs/fields');
-require('dotenv').config()
-const {LocalFileAdapter} = require('@keystonejs/file-adapters');
+
 const CloudStorageAdapter = require('./packages/keystone-google-cloud-storage-adapter')
 
-const {Markdown} = require('@keystonejs/fields-markdown');
-const {atTracking, byTracking} = require('@keystonejs/list-plugins');
-const ACCESS_OPEN = ({
-    authentication: {
-        item: user
-    }
-}) => Boolean(!user || (user && user.permissionLevel != 'NONE'));
-const ACCESS_GENERAL = ({
-    authentication: {
-        item: user
-    }
-}) => Boolean(user && user.permissionLevel != 'NONE');
-const ACCESS_TECH_TEAM = ({
-    authentication: {
-        item: user
-    }
-}) => Boolean(user && (user.permissionLevel == 'TECH_TEAM' || user.permissionLevel == 'GENERAL'));
-const ACCESS_ADMIN = ({
-    authentication: {
-        item: user
-    }
-}) => Boolean(user && user.permissionLevel == 'ADMIN');
+const { Markdown } = require('@keystonejs/fields-markdown');
+const { atTracking, byTracking } = require('@keystonejs/list-plugins');
+
+require('dotenv').config()
+
+const ACCESS_OPEN = ({ authentication: { item: user } }) => Boolean(!user || (user && user.permissionLevel != 'NONE'));
+const ACCESS_GENERAL = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel != 'NONE');
+const ACCESS_TECH_TEAM = ({ authentication: { item: user } }) => Boolean(user && (user.permissionLevel == 'ADMIN' || user.permissionLevel == 'TECH_TEAM'));
+const ACCESS_ADMIN = ({ authentication: { item: user } }) => Boolean(user && user.permissionLevel == 'ADMIN');
 
 start = "-----BEGIN PRIVATE KEY-----\n"
 msg = process.env.GOOGLE_PRIVATE
@@ -55,17 +41,17 @@ cred = {
 }
 
 var fileAdaptor = new CloudStorageAdapter({
-    cloudStorage: {
-        credentials: cred,
-        path: 'uploads/',
-        bucket: 'hackgt-cms-files',
-        uploadOptions: {
-            public: true
-        }
-    },
-    schema: {
-        url: true
+  cloudStorage: {
+    credentials: cred,
+    path: 'uploads/',
+    bucket: 'hackgt-cms-files',
+    uploadOptions: {
+      public: true
     }
+  },
+  schema: {
+    url: true,
+  }
 })
 
 const IS_ADMIN_OR_FILTER = (user, filter) => {
@@ -270,6 +256,11 @@ exports.Hackathon = {
             ref: 'BrandAsset.hackathons',
             many: true
         },
+        sponsors: {
+          type: Relationship,
+          ref: 'Sponsor.hackathons',
+          many: true
+        },
         slackUrl: {
             type: Url
         },
@@ -280,20 +271,17 @@ exports.Hackathon = {
     },
     adminConfig: {
         defaultColumns: 'name, isActive'
-    },
-    plugins: [
-        atTracking({access: false}),
-        byTracking({access: false})
-    ]
+    }
 }
+
 exports.Sponsor = {
-    access: {
-        create: ACCESS_GENERAL,
-        read: ACCESS_OPEN,
-        update: ACCESS_GENERAL,
-        delete: ACCESS_GENERAL
-    },
-    adminDoc: 'Sponsors',
+  access: {
+    create: ACCESS_GENERAL,
+    read: ACCESS_OPEN,
+    update: ACCESS_GENERAL,
+    delete: ACCESS_GENERAL
+  },
+  adminDoc: 'Sponsors for the hackathon',
     fields: {
         name: {
             type: Text,
@@ -313,20 +301,51 @@ exports.Sponsor = {
                     }
                 }
             }
+        },
+        hackathons: {
+          type: Relationship,
+          ref: 'Hackathon.sponsors',
+          many: true,
+          isRequired: true
         }
     },
-    hooks: {
-        afterDelete: async ({existingItem}) => {
-            if (existingItem.file) {
-                await fileAdapter.delete(existingItem.file);
-            }
-        }
+  hooks: {
+    afterDelete: async ({ existingItem }) => {
+      if (existingItem.file) {
+        await fileAdapter.delete(existingItem.file);
+      }
     },
+},
     plugins: [
         atTracking({access: false}),
         byTracking({access: false})
     ]
 }
+
+exports.SocialAccount = {
+  access: {
+    create: ACCESS_TECH_TEAM,
+    read: ACCESS_OPEN,
+    update: ACCESS_TECH_TEAM,
+    delete: ACCESS_TECH_TEAM
+  },
+  adminDoc: 'HackGT social media links',
+  fields: {
+    name: {
+      type: Text,
+      isRequired: true
+    },
+    url: {
+      type: Url,
+      isRequired: true
+    }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
+}
+
 exports.Event = {
     access: {
         create: ACCESS_GENERAL,
@@ -480,23 +499,23 @@ exports.Location = {
 }
 
 exports.Type = {
-    access: {
-        create: ACCESS_ADMIN,
-        read: ACCESS_OPEN,
-        update: ACCESS_ADMIN,
-        delete: ACCESS_ADMIN
-    },
-    adminDoc: 'Types of hackathon events',
-    fields: {
-        name: {
-            type: Text,
-            isRequired: true
-        }
-    },
-    plugins: [
-        atTracking({access: false}),
-        byTracking({access: false})
-    ]
+  access: {
+    create: ACCESS_TECH_TEAM,
+    read: ACCESS_OPEN,
+    update: ACCESS_TECH_TEAM,
+    delete: ACCESS_TECH_TEAM
+  },
+  adminDoc: 'Types of hackathon events',
+  fields: {
+    name: {
+      type: Text,
+      isRequired: true
+    }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
 }
 
 exports.BrandAsset = {

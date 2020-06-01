@@ -12,18 +12,18 @@ export default {
       children: [
         {
           label: 'Schedule',
-          children: ['Event']
+          children: ['Event', 'Location']
         },
         {
           label: 'Content',
-          children: ['FAQ', 'Block', 'Sponsor', 'BrandAsset']
+          children: ['FAQ', 'Block', 'Sponsor', 'BrandAsset', 'SocialAccount']
         }
       ]
     },
     {
       label: "Admin",
       children: [
-        'User', 'Hackathon', 'Location', 'Type'
+        'User', 'Hackathon', 'Type'
       ]
     }
   ]

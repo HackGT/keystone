@@ -12835,15 +12835,6 @@ keystone-email@^1.1.0:
     mandrill-api "^1.0.45"
     object-assign "^4.1.1"
 
-keystone-google-cloud-storage-adapter@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/keystone-google-cloud-storage-adapter/-/keystone-google-cloud-storage-adapter-0.0.3.tgz#a38ee4ef9a25c148be380ad1642dfade09389c97"
-  integrity sha512-3QPtHRtGiM/cnliyW+QgWf9kkzIu3yzyj410qb1wc+VWOAiAEhtzHnvWWd9w1U3en2Wakv+VG5M0KhWpPI+9Cg==
-  dependencies:
-    "@google-cloud/storage" "^1.6.0"
-    debug "^2.2.0"
-    keystone-storage-namefunctions "^1.0.0"
-
 keystone-storage-namefunctions@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/keystone-storage-namefunctions/-/keystone-storage-namefunctions-1.1.1.tgz#1f0986451b4e80dd434c38e0d1cd5d3c9d531b55"
