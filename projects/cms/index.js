@@ -23,7 +23,7 @@ const keystone = new Keystone({
     secure: true // Change to false to run production mode locally, see https://www.keystonejs.com/keystonejs/keystone/#secure
   },
   // Fixes build error - https://github.com/keystonejs/keystone/issues/2350
-  sessionStore: process.env.BUILD_STAGE == "TRUE" ? null : new MongoStore({ url: process.env.MONGO_URL })
+  sessionStore: process.env.BUILD_STAGE == "true" ? null : new MongoStore({ url: process.env.MONGO_URL })
 });
 
 keystone.createList('Hackathon', Hackathon);

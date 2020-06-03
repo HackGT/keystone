@@ -43,7 +43,7 @@ function extractAppMeta(apps, dev) {
       }
       case 'GraphQLApp': {
         apiPath = app._apiPath;
-        graphiqlPath = process.env.GRAPHIQL_ENABLED == "TRUE" ? app._graphiqlPath : undefined;
+        graphiqlPath = process.env.GRAPHIQL_ENABLED == "true" ? app._graphiqlPath : undefined;
         break;
       }
     }
