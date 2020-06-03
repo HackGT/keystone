@@ -152,18 +152,19 @@ function createApolloServer(keystone, apolloConfig, schemaName, dev) {
     }),
     ...(process.env.ENGINE_API_KEY
       ? {
-          engine: { apiKey: process.env.ENGINE_API_KEY },
-          tracing: true,
-        }
+        engine: { apiKey: process.env.ENGINE_API_KEY },
+        tracing: true,
+      }
       : {
-          engine: false,
-          // Only enable tracing in dev mode so we can get local debug info, but
-          // don't bother returning that info on prod when the `engine` is
-          // disabled.
-          tracing: dev,
-        }),
+        engine: false,
+        // Only enable tracing in dev mode so we can get local debug info, but
+        // don't bother returning that info on prod when the `engine` is
+        // disabled.
+        tracing: dev,
+      }),
     formatError: _formatError,
     ...apolloConfig,
+    introspection: true
   });
   keystone.registerSchema(schemaName, server.schema);
 
