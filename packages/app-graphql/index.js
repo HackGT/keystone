@@ -25,7 +25,7 @@ class GraphQLApp {
     const graphiqlPath = this._graphiqlPath;
     const app = express();
 
-    if (dev && graphiqlPath) {
+    if (process.env.GRAPHIQL_ENABLED == "TRUE" && graphiqlPath) {
       // This is a convenience to make the out of the box experience slightly simpler.
       // We should reconsider support for this at some point in the future. -TL
       app.use(
@@ -42,7 +42,7 @@ class GraphQLApp {
   /**
    * @param Options { distDir }
    */
-  build() {}
+  build() { }
 }
 
 module.exports = {

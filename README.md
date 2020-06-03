@@ -12,11 +12,11 @@ The development is done from the `master` branch.
 
 1. Run `yarn` to install the dependencies for the monorepo
 2. Ensure the MongoDB server is running (typically started by running `mongod`)
-3. Copy `.env.example` to `.env` and add environment variables
-4. Change directory to `projects/cms`
+3. Change directory to `projects/cms`
+4. Copy `.env.example` to `.env` and add environment variables
 5. Run `yarn dev` to start development
 
-To build for production, run `yarn build` instead.
+To build for production, run `yarn build` and then `yarn start` instead. If you are running locally, make sure to change secure cookies to false in index.js.
 
 If you mess up any installation, run `yarn fresh` to clean the project and reinstall dependencies.
 
@@ -26,7 +26,7 @@ If you mess up any installation, run `yarn fresh` to clean the project and reins
 	- Used to implement 3rd party auth with passport for Ground Truth
 - Branch [`show-read-only-field-by-access-in-admin-ui`](https://github.com/gautamsi/keystone/tree/show-read-only-field-by-access-in-admin-ui) by gautamsi ([Pull Request](https://github.com/keystonejs/keystone/pull/2258))
   - Used to show read only fields as disabled and grayed out
-
+1
 <div align="center">
   <img src="website/static/readme-header.png" width="557">
   <h1>KeystoneJS</h1>

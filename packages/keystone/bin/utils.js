@@ -43,7 +43,7 @@ function extractAppMeta(apps, dev) {
       }
       case 'GraphQLApp': {
         apiPath = app._apiPath;
-        graphiqlPath = dev ? app._graphiqlPath : undefined;
+        graphiqlPath = process.env.GRAPHIQL_ENABLED == "TRUE" ? app._graphiqlPath : undefined;
         break;
       }
     }
@@ -95,7 +95,7 @@ async function executeDefaultServer(args, entryFile, distDir, spinner) {
   const {
     keystone,
     apps = [],
-    configureExpress = () => {},
+    configureExpress = () => { },
     cors,
     pinoOptions,
   } = require(path.resolve(entryFile));
