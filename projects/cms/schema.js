@@ -13,7 +13,7 @@ const {
 const CloudStorageAdapter = require('./packages/keystone-google-cloud-storage-adapter')
 
 const { Markdown } = require('@keystonejs/fields-markdown');
-const { atTracking, byTracking } = require('@keystonejs/list-plugins');
+const { atTracking, byTracking, createdAt, updatedAt } = require('@keystonejs/list-plugins');
 
 require('dotenv').config()
 
@@ -301,6 +301,30 @@ exports.Sponsor = {
           }
         }
       }
+    },
+    tier: {
+      type: Select,
+      dataType: 'integer',
+      options: [
+        {
+          value: 1,
+          label: 'Tier 1'
+        }, {
+          value: 2,
+          label: 'Tier 2'
+        },
+        {
+          value: 3,
+          label: 'Tier 3'
+        }, {
+          value: 4,
+          label: 'Tier 4'
+        },
+        {
+          value: 5,
+          label: 'Tier 5'
+        }
+      ],
     },
     hackathons: {
       type: Relationship,
@@ -648,7 +672,8 @@ exports.User = {
     defaultColumns: 'name, email, permissionLevel'
   },
   plugins: [
-    atTracking({ access: false }),
+    createdAt(),
+    updatedAt({ access: false }),
     byTracking({ access: false })
   ]
 }
