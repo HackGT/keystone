@@ -20,6 +20,10 @@ To build for production, run `yarn build` and then `yarn start` instead. If you 
 
 If you mess up any installation, run `yarn fresh` to clean the project and reinstall dependencies.
 
+## Sending Authenticated Requests
+
+To send requests with the `Authorization: Bearer <token>` specification, you can use your keystone.sid cookie. Remove the beginning `s%3A` and the remaining portion is your token.
+
 ## List of Merged Branches
 
 - Branch [`admin-ui-login-improvements`](https://github.com/zenflow/keystone/tree/admin-ui-login-improvements) by zenflow ([Pull Request](https://github.com/keystonejs/keystone/pull/2657))
