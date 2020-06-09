@@ -514,6 +514,10 @@ exports.Location = {
     capacity: {
       type: Integer,
       isReadOnly: !ACCESS_ADMIN
+    },
+    mapGTSlug: {
+      type: Text,
+      label: "MapGT Slug"
     }
   },
   plugins: [
