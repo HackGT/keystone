@@ -19,6 +19,9 @@ const keystone = new Keystone({
     mongoUri: process.env.MONGO_URL,
   }),
   cookieSecret: process.env.COOKIE_SECRET,
+  cookie: {
+    secure: true // Change to false to run production mode locally, see https://www.keystonejs.com/keystonejs/keystone/#secure
+  },
   // Fixes build error - https://github.com/keystonejs/keystone/issues/2350
   sessionStore: process.env.BUILD_STAGE == "true" ? null : new MongoStore({ url: process.env.MONGO_URL })
 });
