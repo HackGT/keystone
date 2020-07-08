@@ -331,6 +331,22 @@ exports.Sponsor = {
       ref: 'Hackathon.sponsors',
       many: true,
       isRequired: true
+    },
+    about: {
+      type: Markdown,
+      isRequired: true
+    },
+    eventInformation: {
+      type: Markdown
+    },
+    challengeInformation: {
+      type: Markdown
+    },
+    recruiting: {
+      type: Markdown
+    },
+    additionalInfo: {
+      type: Markdown
     }
   },
   hooks: {
