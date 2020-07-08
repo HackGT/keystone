@@ -12,7 +12,7 @@ export default {
       children: [
         {
           label: 'Schedule',
-          children: ['Event', 'Location']
+          children: ['Event', 'Location', 'Tag']
         },
         {
           label: 'Content',
