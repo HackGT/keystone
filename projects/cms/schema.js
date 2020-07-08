@@ -457,6 +457,11 @@ exports.Event = {
       type: Relationship,
       ref: 'Location',
       many: true
+    },
+    tags: {
+      type: Relationship,
+      ref: 'Tag.events',
+      many: true
     }
   },
   adminConfig: {
@@ -538,6 +543,31 @@ exports.Type = {
     name: {
       type: Text,
       isRequired: true
+    }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
+}
+
+exports.Tag = {
+  access: {
+    create: ACCESS_GENERAL,
+    read: ACCESS_OPEN,
+    update: ACCESS_GENERAL,
+    delete: ACCESS_GENERAL
+  },
+  adminDoc: 'Description tags used for labeling events',
+  fields: {
+    name: {
+      type: Text,
+      isRequired: true
+    },
+    events: {
+      type: Relationship,
+      ref: 'Event.tags',
+      many: true
     }
   },
   plugins: [
