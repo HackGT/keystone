@@ -56,7 +56,7 @@ const AccessDeniedPage = () => {
         <Divider />
         <Content>
           <h3>Access Denied</h3>
-          <p>You do not have admin access.</p>
+          <p>You do not have access to CMS.<br />Please contact a member of tech team for permission.</p>
           <a href={'/'}>Go Home</a>
         </Content>
       </Box>

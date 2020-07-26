@@ -63,7 +63,7 @@ const groundTruthStrategy = keystone.createAuthStrategy({
       if (createData.email in defaultUserPermissions) {
         createData.permissionLevel = defaultUserPermissions[createData.email];
       } else {
-        createData.permissionLevel = 'GENERAL';
+        createData.permissionLevel = 'NONE';
       }
 
       return createData;
@@ -76,6 +76,7 @@ const graphQLApp = new GraphQLApp({});
 const adminApp = new AdminUIApp({
   authStrategy: groundTruthStrategy,
   hooks: require.resolve('./admin/'),
+  isAccessAllowed: ({ authentication: { item: user } }) => Boolean(!!user && user.permissionLevel != 'NONE')
 });
 
 const staticApp = new StaticApp({
