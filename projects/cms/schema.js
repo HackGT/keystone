@@ -657,7 +657,16 @@ exports.FAQ = {
       type: Text,
       isMultiline: true,
       isRequired: true
+    },
+    index: {
+      type: Integer,
+      isRequired: true,
+      adminDoc: 'Used to sort the FAQs. Lower numbers come first.'
     }
+  },
+  adminConfig: {
+    defaultSort: 'index',
+    defaultColumns: 'question, answer, index'
   },
   plural: 'FAQs',
   plugins: [
