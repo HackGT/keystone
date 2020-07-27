@@ -173,7 +173,13 @@ const readAdminAccess = {
 exports.Block = {
   access: {
     create: ACCESS_GENERAL,
-    read: ACCESS_OPEN,
+    read: ({ authentication: { item: user } }) => {
+      return IS_ADMIN_OR_FILTER(user, {
+        'hackathon': {
+          'isActive': true
+        }
+      })
+    },
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL
   },
@@ -207,10 +213,9 @@ exports.Block = {
         }
       ]
     },
-    hackathons: {
+    hackathon: {
       type: Relationship,
       ref: 'Hackathon.blocks',
-      many: true,
       isRequired: true
     }
   },
@@ -250,7 +255,12 @@ exports.Hackathon = {
     },
     blocks: {
       type: Relationship,
-      ref: 'Block.hackathons',
+      ref: 'Block.hackathon',
+      many: true
+    },
+    faqs: {
+      type: Relationship,
+      ref: 'FAQ.hackathon',
       many: true
     },
     branding: {
@@ -391,11 +401,7 @@ exports.SocialAccount = {
 exports.Event = {
   access: {
     create: ACCESS_GENERAL,
-    read: ({
-      authentication: {
-        item: user
-      }
-    }) => {
+    read: ({ authentication: { item: user } }) => {
       return IS_ADMIN_OR_FILTER(user, {
         'hackathon': {
           'isActive': true
@@ -644,7 +650,13 @@ exports.BrandAsset = {
 exports.FAQ = {
   access: {
     create: ACCESS_GENERAL,
-    read: ACCESS_OPEN,
+    read: ({ authentication: { item: user } }) => {
+      return IS_ADMIN_OR_FILTER(user, {
+        'hackathon': {
+          'isActive': true
+        }
+      })
+    },
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL
   },
@@ -664,6 +676,11 @@ exports.FAQ = {
       type: Integer,
       isRequired: true,
       adminDoc: 'Used to sort the FAQs. Lower numbers come first.'
+    },
+    hackathon: {
+      type: Relationship,
+      ref: 'Hackathon.faqs',
+      isRequired: true
     }
   },
   adminConfig: {
