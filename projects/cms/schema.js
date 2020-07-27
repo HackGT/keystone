@@ -193,6 +193,7 @@ exports.Block = {
     },
     usage: {
       type: Select,
+      isRequired: true,
       options: [
         {
           value: 'MOBILE',
@@ -214,7 +215,8 @@ exports.Block = {
     }
   },
   adminConfig: {
-    defaultColumns: 'name, slug, usage'
+    defaultColumns: 'name, slug, usage',
+    defaultSort: 'slug'
   },
   plugins: [
     atTracking({ access: false }),
