@@ -385,6 +385,16 @@ exports.Sponsor = {
       ref: 'Event.sponsors',
       many: true
     },
+    perks: {
+      type: Relationship,
+      ref: 'Perk.sponsors',
+      many: true
+    },
+    challenges: {
+      type: Relationship,
+      ref: 'Challenge.sponsors',
+      many: true
+    },
     about: {
       type: Markdown,
       isRequired: true
@@ -417,6 +427,64 @@ exports.Sponsor = {
     atTracking({ access: false }),
     byTracking({ access: false })
   ]
+}
+
+exports.Perk = {
+  access: {
+    create: ACCESS_GENERAL,
+    read: ACCESS_OPEN,
+    update: ACCESS_GENERAL,
+    delete: ACCESS_GENERAL
+  },
+  adminDoc: 'List of available perks relating to online for sponsors',
+  fields: {
+    name: {
+      type: Text,
+      isRequired: true
+    },
+    slug: {
+      type: Text,
+      isRequired: true
+    },
+    sponsors: {
+      type: Relationship,
+      ref: "Sponsor.perks",
+      many: true
+    }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
+}
+
+exports.Challenge = {
+  access: {
+    create: ACCESS_GENERAL,
+    read: ACCESS_OPEN,
+    update: ACCESS_GENERAL,
+    delete: ACCESS_GENERAL
+  },
+  adminDoc: 'Challenges created/hosted by sponsors',
+  fields: {
+    name: {
+      type: Text,
+      isRequired: true
+    },
+    prize: {
+      type: Text,
+      isRequired: true
+    },
+    description: {
+      type: Markdown,
+      isRequired: true
+    },
+    sponsors: {
+      type: Relationship,
+      ref: "Sponsor.challenges",
+      many: true
+    }
+  }
 }
 
 exports.SocialAccount = {
