@@ -270,7 +270,7 @@ exports.Hackathon = {
     },
     sponsors: {
       type: Relationship,
-      ref: 'Sponsor.hackathons',
+      ref: 'Sponsor.hackathon',
       many: true
     },
     slackUrl: {
@@ -303,16 +303,52 @@ exports.Sponsor = {
       type: Url,
       isRequired: true
     },
-    image: {
+    originalLogo: {
       type: File,
       adapter: fileAdapter,
       hooks: {
         beforeChange: async ({ existingItem }) => {
-          if (existingItem && existingItem.image) {
-            await fileAdapter.delete(existingItem.image);
+          if (existingItem && existingItem.originalLogo) {
+            await fileAdapter.delete(existingItem.originalLogo);
           }
         }
       }
+    },
+    themedLogo: {
+      type: File,
+      adapter: fileAdapter,
+      hooks: {
+        beforeChange: async ({ existingItem }) => {
+          if (existingItem && existingItem.themedLogo) {
+            await fileAdapter.delete(existingItem.themedLogo);
+          }
+        }
+      }
+    },
+    logoSize: {
+      type: Select,
+      isRequired: true,
+      options: [
+        {
+          value: 'XS',
+          label: 'XS'
+        },
+        {
+          value: 'S',
+          label: 'S'
+        },
+        {
+          value: 'M',
+          label: 'M'
+        }, {
+          value: 'L',
+          label: 'L'
+        },
+        {
+          value: 'XL',
+          label: 'XL'
+        }
+      ],
     },
     tier: {
       type: Select,
@@ -321,7 +357,8 @@ exports.Sponsor = {
         {
           value: 1,
           label: 'Tier 1'
-        }, {
+        },
+        {
           value: 2,
           label: 'Tier 2'
         },
@@ -338,11 +375,15 @@ exports.Sponsor = {
         }
       ],
     },
-    hackathons: {
+    hackathon: {
       type: Relationship,
       ref: 'Hackathon.sponsors',
-      many: true,
       isRequired: true
+    },
+    events: {
+      type: Relationship,
+      ref: 'Event.sponsors',
+      many: true
     },
     about: {
       type: Markdown,
@@ -363,8 +404,12 @@ exports.Sponsor = {
   },
   hooks: {
     afterDelete: async ({ existingItem }) => {
-      if (existingItem.image) {
-        await fileAdapter.delete(existingItem.image);
+      if (existingItem.originalLogo) {
+        await fileAdapter.delete(existingItem.originalLogo);
+      }
+
+      if (existingItem.themedLogo) {
+        await fileAdapter.delete(existingItem.themedLogo);
       }
     },
   },
@@ -480,6 +525,11 @@ exports.Event = {
     location: {
       type: Relationship,
       ref: 'Location',
+      many: true
+    },
+    sponsors: {
+      type: Relationship,
+      ref: 'Sponsor.events',
       many: true
     },
     tags: {
