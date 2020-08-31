@@ -273,6 +273,11 @@ exports.Hackathon = {
       ref: 'Sponsor.hackathon',
       many: true
     },
+    challenges: {
+      type: Relationship,
+      ref: 'Challenge.hackathon',
+      many: true
+    },
     slackUrl: {
       type: Url
     },
@@ -289,7 +294,13 @@ exports.Hackathon = {
 exports.Sponsor = {
   access: {
     create: ACCESS_GENERAL,
-    read: ACCESS_OPEN,
+    read: ({ authentication: { item: user } }) => {
+      return IS_ADMIN_OR_FILTER(user, {
+        'hackathon': {
+          'isActive': true
+        }
+      })
+    },
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL
   },
@@ -461,7 +472,13 @@ exports.Perk = {
 exports.Challenge = {
   access: {
     create: ACCESS_GENERAL,
-    read: ACCESS_OPEN,
+    read: ({ authentication: { item: user } }) => {
+      return IS_ADMIN_OR_FILTER(user, {
+        'hackathon': {
+          'isActive': true
+        }
+      })
+    },
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL
   },
@@ -477,6 +494,11 @@ exports.Challenge = {
     },
     description: {
       type: Markdown,
+      isRequired: true
+    },
+    hackathon: {
+      type: Relationship,
+      ref: "Hackathon.challenges",
       isRequired: true
     },
     sponsors: {
