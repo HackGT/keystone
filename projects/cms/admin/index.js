@@ -16,7 +16,11 @@ export default {
         },
         {
           label: 'Content',
-          children: ['FAQ', 'Block', 'Sponsor', 'BrandAsset', 'SocialAccount']
+          children: ['FAQ', 'Block', 'BrandAsset', 'SocialAccount']
+        },
+        {
+          label: 'Sponsors',
+          children: ['Sponsor', 'Perk', 'Challenge']
         }
       ]
     },
