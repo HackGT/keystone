@@ -220,7 +220,7 @@ exports.Block = {
     }
   },
   adminConfig: {
-    defaultColumns: 'name, slug, usage',
+    defaultColumns: 'name, slug, usage, hackathon',
     defaultSort: 'slug'
   },
   plugins: [
@@ -288,7 +288,11 @@ exports.Hackathon = {
   },
   adminConfig: {
     defaultColumns: 'name, isActive'
-  }
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
 }
 
 exports.Sponsor = {
@@ -434,6 +438,9 @@ exports.Sponsor = {
       }
     },
   },
+  adminConfig: {
+    defaultColumns: 'name, website, hackathon'
+  },
   plugins: [
     atTracking({ access: false }),
     byTracking({ access: false })
@@ -462,6 +469,9 @@ exports.Perk = {
       ref: "Sponsor.perks",
       many: true
     }
+  },
+  adminConfig: {
+    defaultColumns: 'name, slug'
   },
   plugins: [
     atTracking({ access: false }),
@@ -506,7 +516,14 @@ exports.Challenge = {
       ref: "Sponsor.challenges",
       many: true
     }
-  }
+  },
+  adminConfig: {
+    defaultColumns: 'name, sponsors, hackathon'
+  },
+  plugins: [
+    atTracking({ access: false }),
+    byTracking({ access: false })
+  ]
 }
 
 exports.SocialAccount = {
@@ -629,7 +646,7 @@ exports.Event = {
     }
   },
   adminConfig: {
-    defaultColumns: 'name, startTime, endTime, type',
+    defaultColumns: 'name, startTime, endTime, type, hackathon',
     defaultSort: 'startDate'
   },
   hooks: {
@@ -825,7 +842,7 @@ exports.FAQ = {
   },
   adminConfig: {
     defaultSort: 'index',
-    defaultColumns: 'question, answer, index'
+    defaultColumns: 'question, answer, index, hackathon'
   },
   plural: 'FAQs',
   plugins: [
