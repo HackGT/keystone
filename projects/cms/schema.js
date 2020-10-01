@@ -410,6 +410,12 @@ exports.Sponsor = {
       ref: 'Challenge.sponsors',
       many: true
     },
+    videoLink: {
+      type: Url
+    },
+    blueJeansLink: {
+      type: Url
+    },
     about: {
       type: Markdown,
       isRequired: true
