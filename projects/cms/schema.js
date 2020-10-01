@@ -649,6 +649,9 @@ exports.Event = {
       type: Relationship,
       ref: 'Tag.events',
       many: true
+    },
+    url: {
+      type: Url
     }
   },
   adminConfig: {
