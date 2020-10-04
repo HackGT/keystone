@@ -416,6 +416,9 @@ exports.Sponsor = {
     blueJeansLink: {
       type: Url
     },
+    moderatorLink: {
+      type: Url
+    },
     about: {
       type: Markdown,
       isRequired: true
