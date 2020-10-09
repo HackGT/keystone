@@ -232,12 +232,10 @@ exports.Block = {
 exports.Hackathon = {
   access: {
     create: ACCESS_ADMIN,
-    read: ({
-      authentication: {
-        item: user
-      }
-    }) => {
-      return IS_ADMIN_OR_FILTER(user, { 'isActive': true })
+    read: ({ authentication: { item: user } }) => {
+      return IS_ADMIN_OR_FILTER(user, {
+        'isActive': true
+      })
     },
     update: ACCESS_ADMIN,
     delete: ACCESS_ADMIN
@@ -276,6 +274,11 @@ exports.Hackathon = {
     challenges: {
       type: Relationship,
       ref: 'Challenge.hackathon',
+      many: true
+    },
+    tags: {
+      type: Relationship,
+      ref: 'Tag.hackathon',
       many: true
     },
     slackUrl: {
@@ -753,7 +756,13 @@ exports.Type = {
 exports.Tag = {
   access: {
     create: ACCESS_GENERAL,
-    read: ACCESS_OPEN,
+    read: ({ authentication: { item: user } }) => {
+      return IS_ADMIN_OR_FILTER(user, {
+        'hackathon': {
+          'isActive': true
+        }
+      })
+    },
     update: ACCESS_GENERAL,
     delete: ACCESS_GENERAL
   },
@@ -767,6 +776,11 @@ exports.Tag = {
       type: Relationship,
       ref: 'Event.tags',
       many: true
+    },
+    hackathon: {
+      type: Relationship,
+      ref: 'Hackathon.tags',
+      isRequired: true
     }
   },
   plugins: [
