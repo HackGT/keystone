@@ -736,6 +736,12 @@ exports.Type = {
     name: {
       type: Text,
       isRequired: true
+    },
+    // TODO: Change type to Color after updating package
+    color: {
+      type: Text,
+      isRequired: true,
+      adminDoc: "Used to display the color in AppGT (Store value as hex with #)"
     }
   },
   plugins: [
