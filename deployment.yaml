@@ -1,5 +1,7 @@
 git:
   branch: master
+  
+health:
 
 wants:
   mongo: true
