@@ -2,6 +2,7 @@ git:
   branch: master
   
 health:
+  path: /
 
 wants:
   mongo: true
