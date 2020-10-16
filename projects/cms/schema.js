@@ -57,7 +57,7 @@ var fileAdapter = new CloudStorageAdapter({
 const IS_ADMIN_OR_FILTER = (user, filter) => {
   if (Boolean(user && user.permissionLevel == 'NONE')) {
     return false;
-  } else if (Boolean(user && user.permissionLevel == 'ADMIN')) {
+  } else if (Boolean(user && user.permissionLevel == 'ADMIN') || !Boolean(user)) {
     return {};
   }
 
