@@ -745,6 +745,10 @@ exports.Type = {
       type: Text,
       isRequired: true,
       adminDoc: "Used to display the color in AppGT (Store value as hex with #)"
+    },
+    points: {
+      type: Integer,
+      adminDoc: "Points for swag"
     }
   },
   plugins: [
