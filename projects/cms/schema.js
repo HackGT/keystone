@@ -163,6 +163,35 @@ const TIMES = [
   "11:45 PM"
 ]
 
+const TIME_ZONES = [
+  "+14:00",
+  "+13:00",
+  "+12:00",
+  "+11:00",
+  "+10:00",
+  "+09:00",
+  "+08:00",
+  "+07:00",
+  "+06:00",
+  "+05:00",
+  "+04:00",
+  "+03:00",
+  "+02:00",
+  "+01:00",
+  "+00:00",
+  "-01:00",
+  "-02:00",
+  "-03:00",
+  "-04:00",
+  "-05:00",
+  "-06:00",
+  "-07:00",
+  "-08:00",
+  "-09:00",
+  "-10:00",
+  "-11:00",
+]
+
 const readAdminAccess = {
   create: ACCESS_ADMIN,
   read: ACCESS_GENERAL,
@@ -587,6 +616,13 @@ exports.Event = {
       many: false,
       isRequired: true
     },
+    timeZone: {
+      type: Select,
+      dataType: 'string',
+      options: TIME_ZONES,
+      isRequired: true,
+      adminDoc: 'Please search for the time zone'
+    },
     startDay: {
       type: CalendarDay,
       isRequired: true,
@@ -683,10 +719,14 @@ exports.Event = {
         existingItem
           ? existingItem.endTime
           : null);
+      const timeZone = resolvedData.timeZone || (
+        existingItem
+          ? existingItem.timeZone
+          : "-04:00");
 
       if (startDay && startTime && endDay && endTime) {
-        resolvedData.startDate = new Date(`${startDay} ${startTime} UTC`).toISOString();
-        resolvedData.endDate = new Date(`${endDay} ${endTime} UTC`).toISOString();
+        resolvedData.startDate = new Date(`${startDay} ${startTime} UTC ${timeZone}`).toISOString();
+        resolvedData.endDate = new Date(`${endDay} ${endTime} UTC ${timeZone}`).toISOString();
       }
 
       return resolvedData;
