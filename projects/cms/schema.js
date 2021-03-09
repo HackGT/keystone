@@ -316,6 +316,10 @@ exports.Hackathon = {
     isActive: {
       type: Checkbox,
       defaultValue: true
+    },
+    isUsedForMobileApp: {
+      type: Checkbox,
+      adminDoc: "Check this box if this hackathon is used for the mobile app currently. Only one hackathon should be selected at a time."
     }
   },
   adminConfig: {
